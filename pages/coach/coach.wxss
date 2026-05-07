@@ -1,0 +1,28 @@
+/* AI教练页面特有样式 */
+.ai-section {
+  background: #fff;
+}
+
+.loading-text {
+  display: block;
+  margin-bottom: 30rpx;
+  font-weight: 500;
+}
+
+.loading-dots {
+  display: inline-block;
+  animation: dots 1.5s steps(4, end) infinite;
+}
+
+@keyframes dots {
+  0%, 20% { color: rgba(0,0,0,0); text-shadow: .25em 0 0 rgba(0,0,0,0); }
+  40% { color: #999; text-shadow: .25em 0 0 rgba(0,0,0,0); }
+  60% { text-shadow: .25em 0 0 rgba(0,0,0,0); }
+  80%, 100% { color: #999; text-shadow: -.25em 0 0 rgba(0,0,0,0); }
+}
+
+.loading-tip {
+  font-size: 24rpx;
+  color: #ccc;
+  margin-top: 20rpx;
+}

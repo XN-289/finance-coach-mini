@@ -1,0 +1,23 @@
+<view class="container">
+  <!-- 导航栏 -->
+  <view class="nav-bar">
+    <text class="back-btn" bindtap="onBack">←</text>
+    <text class="nav-title">{{conversation.title}}</text>
+    <text class="nav-date">{{conversation.date}}</text>
+  </view>
+
+  <scroll-view class="chat-area" scroll-y scroll-into-view="{{scrollToView}}" scroll-with-animation>
+    <view wx:for="{{conversation.messages}}" wx:key="time" id="msg-{{item.time}}" class="message-item message-{{item.role}}">
+      <view class="message-content">
+        <text class="message-text">{{item.content}}</text>
+        <text class="message-time">{{formatTime(item.time)}}</text>
+      </view>
+    </view>
+  </scroll-view>
+
+  <view class="footer">
+    <button class="action-btn delete" bindtap="deleteConversation">删除对话</button>
+    <button class="action-btn archive" wx:if="{{!conversation.isArchived}}" bindtap="archiveConversation">归档</button>
+    <button class="action-btn unarchive" wx:if="{{conversation.isArchived}}" bindtap="unarchiveConversation">取消归档</button>
+  </view>
+</view>

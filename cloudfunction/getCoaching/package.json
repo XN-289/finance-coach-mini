@@ -1,0 +1,8 @@
+{
+  "name": "getCoaching",
+  "version": "1.0.0",
+  "description": "调用OpenAI API的云函数",
+  "dependencies": {
+    "wx-server-sdk": "~2.6.3"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/coach/coach",
+    "pages/history/history",
+    "pages/period/period",
+    "pages/conversation/conversation"
+  ],
+  "window": {
+    "navigationBarTitleText": "交易教练"
+  },
+  "lazyCodeLoading": "requiredComponents"
+}

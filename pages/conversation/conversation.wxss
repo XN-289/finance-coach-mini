@@ -1,0 +1,93 @@
+/* 对话历史页面特有样式 */
+.nav-title {
+  flex: 1;
+  text-align: center;
+}
+
+.nav-date {
+  font-size: 24rpx;
+  color: #999;
+}
+
+.chat-area {
+  flex: 1;
+  padding: 20rpx;
+}
+
+.message-item {
+  margin-bottom: 30rpx;
+}
+
+.message-content {
+  max-width: 70%;
+  display: inline-block;
+}
+
+.message-item.user .message-content {
+  margin-left: auto;
+  text-align: right;
+}
+
+.message-text {
+  font-size: 28rpx;
+  line-height: 1.8;
+  color: #333;
+  background-color: #fff;
+  padding: 20rpx;
+  border-radius: 12rpx;
+  box-shadow: 0 1rpx 4rpx rgba(0, 0, 0, 0.08);
+  white-space: pre-wrap;
+  word-break: break-all;
+  text-align: left;
+  display: block;
+}
+
+.message-item.user .message-text {
+  background-color: #e4393c;
+  color: #fff;
+}
+
+.message-time {
+  display: block;
+  font-size: 22rpx;
+  color: #999;
+  margin-top: 8rpx;
+}
+
+.message-item.user .message-time {
+  text-align: right;
+}
+
+.footer {
+  display: flex;
+  gap: 20rpx;
+}
+
+.action-btn {
+  flex: 1;
+  padding: 20rpx;
+  font-size: 28rpx;
+  border-radius: 8rpx;
+  border: none;
+  background-color: #f5f5f5;
+  color: #333;
+}
+
+.action-btn.delete {
+  background-color: #f5f5f5;
+  color: #999;
+}
+
+.action-btn.archive {
+  background-color: #e4393c;
+  color: #fff;
+}
+
+.action-btn.unarchive {
+  background-color: #e4393c;
+  color: #fff;
+}
+
+.action-btn:active {
+  opacity: 0.8;
+}

@@ -1,0 +1,13 @@
+# 敏感配置 — 包含 API Key，切勿提交
+utils/config.js
+
+# 微信开发者工具
+.idea/
+*.scss.log
+
+# 私有配置（可能含 AppID 等）
+project.private.config.json
+
+# 系统文件
+.DS_Store
+Thumbs.db

@@ -1,0 +1,32 @@
+<view class="container">
+  <scroll-view class="content-area" scroll-y>
+    <view class="review-section">
+      <view class="section-title">你的复盘</view>
+      <text class="review-text">{{reviewText}}</text>
+    </view>
+
+    <view wx:if="{{aiReply}}" class="ai-section">
+      <view class="section-header">
+        <view class="section-title">交易教练</view>
+        <text class="copy-btn" bindtap="copyReply">复制</text>
+      </view>
+      <text class="ai-text" user-select="true">{{aiReply}}</text>
+    </view>
+
+    <view wx:if="{{loading}}" class="loading">
+      <text class="loading-text">教练正在分析<span class="loading-dots">...</span></text>
+      <view class="loading-spinner"></view>
+      <text class="loading-tip">请稍候，深度分析需要更长时间</text>
+    </view>
+
+    <view wx:if="{{error}}" class="error-section">
+      <view class="error-icon">⚠️</view>
+      <text class="error-text">{{errorMsg}}</text>
+      <button class="retry-btn" bindtap="retryRequest">重新请求</button>
+    </view>
+  </scroll-view>
+
+  <view class="footer">
+    <button class="submit-btn" bindtap="onNewReview">写新复盘</button>
+  </view>
+</view>

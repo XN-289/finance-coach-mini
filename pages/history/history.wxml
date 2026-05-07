@@ -1,0 +1,109 @@
+<view class="container">
+  <!-- 导航栏 -->
+  <view class="nav-bar">
+    <text class="back-btn" bindtap="onBack">←</text>
+    <text class="nav-title">复盘详情</text>
+    <text class="space"></text>
+  </view>
+
+  <scroll-view class="content-area" scroll-y>
+    <view class="review-section">
+      <view class="section-header">
+        <text class="section-title">{{review.date}}</text>
+        <text wx:if="{{review.isDraft}}" class="draft-tag">草稿</text>
+      </view>
+
+      <view class="review-content">
+        <view class="review-item" wx:if="{{review.formData.market}}">
+          <view class="item-label">大盘记录</view>
+          <text class="item-text">{{review.formData.market}}</text>
+        </view>
+
+        <view class="review-item" wx:if="{{review.formData.theme}}">
+          <view class="item-label">题材与主线</view>
+          <text class="item-text">{{review.formData.theme}}</text>
+        </view>
+
+        <view class="review-item">
+          <view class="item-label">知行合一</view>
+
+          <!-- 买入 -->
+          <view wx:if="{{review.formData.buyList.length > 0}}">
+            <text class="item-subtitle">买入</text>
+            <view wx:for="{{review.formData.buyList}}" wx:key="index" class="trade-item">
+              <view class="trade-header">
+                <text class="stock-name">{{item.stock || '-'}}</text>
+                <text class="match-plan {{item.matchPlan ? 'yes' : 'no'}}">{{item.matchPlan ? '符合计划' : '不符合'}}</text>
+              </view>
+              <text class="trade-reason">理由：{{item.reason || '-'}}</text>
+            </view>
+          </view>
+
+          <!-- 卖出 -->
+          <view wx:if="{{review.formData.sellList.length > 0}}" style="margin-top: 32rpx;">
+            <text class="item-subtitle">卖出</text>
+            <view wx:for="{{review.formData.sellList}}" wx:key="index" class="trade-item">
+              <view class="trade-header">
+                <text class="stock-name">{{item.stock || '-'}}</text>
+                <text class="match-plan {{item.matchPlan ? 'yes' : 'no'}}">{{item.matchPlan ? '符合计划' : '不符合'}}</text>
+              </view>
+              <text class="trade-reason">理由：{{item.reason || '-'}}</text>
+            </view>
+          </view>
+
+          <!-- 未执行计划 -->
+          <view wx:if="{{review.formData.missedList.length > 0}}" style="margin-top: 32rpx;">
+            <text class="item-subtitle">未执行计划</text>
+            <view wx:for="{{review.formData.missedList}}" wx:key="index" class="missed-item">
+              <text class="missed-title">原计划：{{item.what || '-'}}</text>
+              <text class="missed-reason">原因：{{item.why || '-'}}</text>
+            </view>
+          </view>
+        </view>
+
+        <view class="review-item" wx:if="{{review.formData.selfAssessment}}">
+          <view class="item-label">自我评价</view>
+          <text class="item-text">{{review.formData.selfAssessment}}</text>
+        </view>
+
+        <view class="review-item" wx:if="{{review.formData.tomorrow}}">
+          <view class="item-label">明日If-Then计划</view>
+          <text class="item-text">{{review.formData.tomorrow}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 未回答的追问 -->
+    <view wx:if="{{review.pendingQuestions && review.pendingQuestions.length > 0}}" class="questions-section">
+      <view class="section-title">教练的追问</view>
+      <view
+        wx:for="{{review.pendingQuestions}}"
+        wx:key="id"
+        class="question-item {{item.answered ? 'answered' : ''}}"
+      >
+        <view class="question-content">
+          <text class="question-num">Q{{index + 1}}</text>
+          <text class="question-text">{{item.question}}</text>
+        </view>
+        <view wx:if="{{!item.answered}}" class="question-action">
+          <text
+            class="mark-btn"
+            data-qid="{{item.id}}"
+            bindtap="markQuestionAnswered"
+          >标记已答</text>
+        </view>
+        <text wx:else class="answered-tag">已回答</text>
+      </view>
+    </view>
+
+    <view wx:if="{{review.aiReply}}" class="ai-section">
+      <view class="section-title">交易教练</view>
+      <text class="ai-text">{{review.aiReply}}</text>
+    </view>
+  </scroll-view>
+
+  <view class="footer">
+    <button wx:if="{{!review.isDraft}}" class="action-btn edit" bindtap="onEdit">编辑</button>
+    <button class="action-btn delete" bindtap="onDelete">删除</button>
+  </view>
+</view>

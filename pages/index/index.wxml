@@ -1,0 +1,428 @@
+<view class="container">
+  <!-- 导航栏 -->
+  <view class="nav-bar">
+    <text class="nav-title">{{editMode ? '编辑复盘' : '今日复盘'}}</text>
+    <text class="menu-btn" bindtap="toggleDrawer">☰</text>
+  </view>
+
+  <!-- 草稿提示条 -->
+  <view wx:if="{{hasDraft}}" class="draft-bar">
+    <text>发现未完成的草稿</text>
+    <view class="draft-actions">
+      <text class="draft-action" bindtap="restoreDraft">恢复</text>
+      <text class="draft-action" bindtap="clearDraft">清除</text>
+    </view>
+  </view>
+
+  <!-- 昨日计划追踪卡片 -->
+  <view wx:if="{{yesterdayPlans.length > 0}}" class="plan-recall-card">
+    <view class="plan-recall-header">
+      <text class="plan-recall-title">昨日计划追踪（{{yesterdayPlanDate}} 复盘）</text>
+    </view>
+    <view
+      wx:for="{{yesterdayPlans}}"
+      wx:key="id"
+      class="plan-recall-item"
+    >
+      <text class="plan-recall-text">{{item.text}}</text>
+      <view class="plan-recall-actions">
+        <text
+          class="plan-recall-btn triggered"
+          data-id="{{item.id}}"
+          bindtap="handlePlanTriggered"
+        >已触发</text>
+        <text
+          class="plan-recall-btn missed"
+          data-id="{{item.id}}"
+          bindtap="handlePlanMissed"
+        >未触发</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 侧边栏遮罩 -->
+  <view wx:if="{{showDrawer}}" class="drawer-mask" bindtap="toggleDrawer"></view>
+
+  <!-- 侧边栏 -->
+  <view class="drawer {{showDrawer ? 'open' : ''}}">
+    <view class="drawer-header">
+      <text class="drawer-title">历史复盘</text>
+      <text class="close-btn" bindtap="toggleDrawer">×</text>
+    </view>
+
+    <scroll-view class="drawer-content" scroll-y>
+      <!-- 周期复盘入口 -->
+      <view class="period-section">
+        <view class="section-header">
+          <text class="section-label">周期复盘</text>
+          <text class="section-action" bindtap="goToPeriod">查看全部</text>
+        </view>
+        <view class="period-list">
+          <view
+            wx:for="{{periodReviews}}"
+            wx:key="id"
+            class="period-item"
+            bindtap="viewPeriodReview"
+            data-id="{{item.id}}"
+          >
+            <text class="period-label">{{item.type === 'week' ? '周复盘' : '月复盘'}}</text>
+            <text class="period-date">{{item.startDate}} ~ {{item.endDate}}</text>
+          </view>
+          <view wx:if="{{periodReviews.length === 0}}" class="empty-tip">暂无周期复盘</view>
+        </view>
+      </view>
+
+      <!-- 历史复盘列表 -->
+      <view class="history-section">
+        <view class="section-header">
+          <text class="section-label">每日复盘</text>
+        </view>
+        <view class="history-list">
+          <view
+            wx:for="{{reviews}}"
+            wx:key="id"
+            class="history-item"
+          >
+            <view class="history-main" bindtap="viewReview" data-id="{{item.id}}">
+              <text class="history-date">{{item.date}}</text>
+              <text class="history-summary">{{item.summary}}</text>
+              <text wx:if="{{item.isDraft}}" class="draft-tag">草稿</text>
+            </view>
+            <view class="history-actions">
+              <text class="action-btn" bindtap="editReview" data-id="{{item.id}}">编辑</text>
+              <text class="action-btn delete" bindtap="confirmDelete" data-id="{{item.id}}">删除</text>
+            </view>
+          </view>
+          <view wx:if="{{reviews.length === 0}}" class="empty-tip">暂无复盘记录</view>
+        </view>
+      </view>
+
+      <!-- 对话历史 -->
+      <view class="history-section">
+        <view class="section-header">
+          <text class="section-label">对话历史</text>
+          <text class="section-action" bindtap="filterArchived">已归档</text>
+        </view>
+        <view class="conversation-list">
+          <view
+            wx:for="{{conversations}}"
+            wx:key="id"
+            class="conversation-item {{item.isArchived ? 'archived' : ''}}"
+          >
+            <view class="conversation-main" bindtap="viewConversation" data-id="{{item.id}}">
+              <text class="conversation-title">{{item.title}}</text>
+              <text class="conversation-date">{{item.date}}</text>
+              <text wx:if="{{item.isArchived}}" class="archived-tag">已归档</text>
+            </view>
+          </view>
+          <view wx:if="{{conversations.length === 0}}" class="empty-tip">暂无对话记录</view>
+        </view>
+      </view>
+    </scroll-view>
+  </view>
+
+  <!-- 表单区域 -->
+  <scroll-view class="form-area" scroll-y>
+    <!-- 市场数据卡片（自动获取） -->
+    <view wx:if="{{marketSummary}}" class="market-snapshot">
+      <view class="snapshot-header">
+        <text class="snapshot-title">今日市场</text>
+        <text class="snapshot-source">数据自动更新</text>
+      </view>
+      <text class="snapshot-text">{{marketSummary}}</text>
+    </view>
+
+    <!-- 市场分析区 -->
+    <view class="form-section">
+      <view class="section-header">
+        <view class="section-title">
+          <text>市场分析</text>
+        </view>
+        <text class="section-subtitle">洞察市场，把握方向</text>
+      </view>
+
+      <view class="input-group">
+        <view class="input-label">
+          <text class="label-text">大盘记录</text>
+          <text class="label-tip">关键数据和特征</text>
+        </view>
+        <textarea
+          class="textarea-input market-input"
+          value="{{formData.market}}"
+          bindinput="onInput"
+          data-field="market"
+          placeholder="今日大盘走势、成交量、关键点位表现..."
+          maxlength="500"
+        />
+        <view class="char-count">{{formData.market.length}}/500</view>
+      </view>
+
+      <view class="input-group">
+        <view class="input-label">
+          <text class="label-text">题材与主线</text>
+          <text class="label-tip">热点轮动与核心逻辑</text>
+        </view>
+        <textarea
+          class="textarea-input theme-input"
+          value="{{formData.theme}}"
+          bindinput="onInput"
+          data-field="theme"
+          placeholder="最强板块、主线方向、题材持续性..."
+          maxlength="500"
+        />
+        <view class="char-count">{{formData.theme.length}}/500</view>
+      </view>
+    </view>
+
+    <!-- 知行合一区 -->
+    <view class="form-section actions-section">
+      <view class="section-header">
+        <view class="section-title">
+          <text class="title-icon">⚖️</text>
+          <text>知行合一</text>
+        </view>
+        <text class="section-subtitle">计划与执行的差距</text>
+      </view>
+
+      <!-- 买入记录 -->
+      <view class="action-category">
+        <view class="category-header buy-header">
+          <text class="category-title">买入记录</text>
+          <text class="category-hint">计划内的决策</text>
+        </view>
+
+        <view class="action-cards" wx:for="{{formData.buyList}}" wx:key="index" wx:for-item="item" wx:for-index="index">
+          <view class="action-card buy-card">
+            <view class="card-header">
+              <view class="card-title">交易 {{index + 1}}</view>
+              <text class="delete-btn" wx:if="{{formData.buyList.length > 1}}" bindtap="deleteBuy" data-index="{{index}}">删除</text>
+            </view>
+
+            <view class="card-content">
+              <view class="form-field">
+                <text class="field-label">股票</text>
+                <input
+                  class="field-input"
+                  value="{{item.stock}}"
+                  bindinput="onInput"
+                  data-field="buyList.stock"
+                  data-index="{{index}}"
+                  placeholder="股票代码或名称"
+                />
+              </view>
+
+              <view class="form-field">
+                <text class="field-label">买入理由</text>
+                <textarea
+                  class="field-textarea"
+                  value="{{item.reason}}"
+                  bindinput="onInput"
+                  data-field="buyList.reason"
+                  data-index="{{index}}"
+                  placeholder="详细说明买入逻辑..."
+                  maxlength="300"
+                />
+                <view class="char-count small">{{item.reason.length}}/300</view>
+              </view>
+
+              <view class="form-field plan-field">
+                <text class="field-label">符合计划</text>
+                <view class="switch-wrapper">
+                  <switch
+                    checked="{{item.matchPlan}}"
+                    bindchange="onSwitch"
+                    data-field="buyList.matchPlan"
+                    data-index="{{index}}"
+                    color="#e4393c"
+                  />
+                  <text class="switch-text">{{item.matchPlan ? '是' : '否'}}</text>
+                </view>
+              </view>
+            </view>
+          </view>
+        </view>
+
+        <view class="add-btn" bindtap="addBuy">
+          <text class="add-icon">+</text>
+          <text>添加买入</text>
+        </view>
+      </view>
+
+      <!-- 卖出记录 -->
+      <view class="action-category">
+        <view class="category-header sell-header">
+          <text class="category-title">卖出记录</text>
+          <text class="category-hint">计划内的决策</text>
+        </view>
+
+        <view class="action-cards" wx:for="{{formData.sellList}}" wx:key="index" wx:for-item="item" wx:for-index="index">
+          <view class="action-card sell-card">
+            <view class="card-header">
+              <view class="card-title">交易 {{index + 1}}</view>
+              <text class="delete-btn" wx:if="{{formData.sellList.length > 1}}" bindtap="deleteSell" data-index="{{index}}">删除</text>
+            </view>
+
+            <view class="card-content">
+              <view class="form-field">
+                <text class="field-label">股票</text>
+                <input
+                  class="field-input"
+                  value="{{item.stock}}"
+                  bindinput="onInput"
+                  data-field="sellList.stock"
+                  data-index="{{index}}"
+                  placeholder="股票代码或名称"
+                />
+              </view>
+
+              <view class="form-field">
+                <text class="field-label">卖出理由</text>
+                <textarea
+                  class="field-textarea"
+                  value="{{item.reason}}"
+                  bindinput="onInput"
+                  data-field="sellList.reason"
+                  data-index="{{index}}"
+                  placeholder="详细说明卖出逻辑..."
+                  maxlength="300"
+                />
+                <view class="char-count small">{{item.reason.length}}/300</view>
+              </view>
+
+              <view class="form-field plan-field">
+                <text class="field-label">符合计划</text>
+                <view class="switch-wrapper">
+                  <switch
+                    checked="{{item.matchPlan}}"
+                    bindchange="onSwitch"
+                    data-field="sellList.matchPlan"
+                    data-index="{{index}}"
+                    color="#e4393c"
+                  />
+                  <text class="switch-text">{{item.matchPlan ? '是' : '否'}}</text>
+                </view>
+              </view>
+            </view>
+          </view>
+        </view>
+
+        <view class="add-btn" bindtap="addSell">
+          <text class="add-icon">+</text>
+          <text>添加卖出</text>
+        </view>
+      </view>
+
+      <!-- 未执行计划 -->
+      <view class="action-category">
+        <view class="category-header missed-header">
+          <text class="category-title">未执行计划</text>
+          <text class="category-hint">知与行的差距</text>
+        </view>
+
+        <view class="missed-cards" wx:for="{{formData.missedList}}" wx:key="index" wx:for-item="item" wx:for-index="index">
+          <view class="missed-card">
+            <view class="missed-header">
+              <view class="missed-title">计划 {{index + 1}}</view>
+              <text class="delete-btn" wx:if="{{formData.missedList.length > 1}}" bindtap="deleteMissed" data-index="{{index}}">删除</text>
+            </view>
+
+            <view class="missed-content">
+              <view class="missed-field">
+                <text class="missed-label">原计划</text>
+                <textarea
+                  class="missed-input"
+                  value="{{item.what}}"
+                  bindinput="onInput"
+                  data-field="missedList.what"
+                  data-index="{{index}}"
+                  placeholder="计划做什么..."
+                  maxlength="300"
+                />
+                <view class="char-count small">{{item.what.length}}/300</view>
+              </view>
+
+              <view class="missed-field">
+                <text class="missed-label">未执行原因</text>
+                <textarea
+                  class="missed-input"
+                  value="{{item.why}}"
+                  bindinput="onInput"
+                  data-field="missedList.why"
+                  data-index="{{index}}"
+                  placeholder="为什么没执行..."
+                  maxlength="300"
+                />
+                <view class="char-count small">{{item.why.length}}/300</view>
+              </view>
+            </view>
+          </view>
+        </view>
+
+        <view class="add-btn" bindtap="addMissed">
+          <text class="add-icon">+</text>
+          <text>添加未执行</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 自我评价区 -->
+    <view class="form-section">
+      <view class="section-header">
+        <view class="section-title">
+          <text>自我评价</text>
+        </view>
+        <text class="section-subtitle">诚实地面对自己</text>
+      </view>
+
+      <view class="input-group">
+        <textarea
+          class="textarea-input self-input"
+          value="{{formData.selfAssessment}}"
+          bindinput="onInput"
+          data-field="selfAssessment"
+          placeholder="给自己的操作打分（1-10分）&#10;今天最大的失误是什么？&#10;今天做得最正确的决定是什么？&#10;下次遇到类似情况会怎么做？"
+          maxlength="500"
+        />
+        <view class="char-count">{{formData.selfAssessment.length}}/500</view>
+      </view>
+    </view>
+
+    <!-- 明日计划区 -->
+    <view class="form-section plan-section">
+      <view class="section-header">
+        <view class="section-title">
+          <text class="title-icon">🎯</text>
+          <text>明日If-Then计划</text>
+        </view>
+        <view class="action-buttons">
+          <text class="action-btn help-btn" bindtap="showPlanHelp">?</text>
+          <text class="action-btn import-btn" bindtap="importFromMissed">导入</text>
+        </view>
+      </view>
+
+      <view class="plan-input-wrapper">
+        <view class="input-label">
+          <text class="label-text">执行规则</text>
+          <text class="label-tip">清晰的条件-行动对应</text>
+        </view>
+        <textarea
+          class="textarea-input plan-input"
+          value="{{formData.tomorrow}}"
+          bindinput="onInput"
+          data-field="tomorrow"
+          placeholder="如果[条件]，就[行动]..."
+          maxlength="500"
+        />
+        <view class="char-count">{{formData.tomorrow.length}}/500</view>
+        <view class="plan-example">
+          <text class="example-label">示例：</text>
+          <text class="example-text">如果股价放量突破前高，就买入2000股</text>
+        </view>
+      </view>
+    </view>
+  </scroll-view>
+
+  <view class="footer">
+    <button class="submit-btn" bindtap="onSubmit">{{editMode ? '保存修改' : '提交复盘'}}</button>
+  </view>
+</view>

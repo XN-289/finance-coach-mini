@@ -1,0 +1,116 @@
+<view class="container">
+  <!-- 导航栏 -->
+  <view class="nav-bar">
+    <text class="back-btn" bindtap="onBack">←</text>
+    <text class="nav-title">{{periodReview ? '周期复盘' : '周期复盘分析'}}</text>
+    <text class="space"></text>
+  </view>
+
+  <scroll-view class="content-area" scroll-y>
+    <!-- 周期复盘入口 -->
+    <view wx:if="{{!periodReview}}" class="entry-section">
+      <view class="section-title">选择分析周期</view>
+      <view class="button-group">
+        <button class="period-btn" bindtap="generateWeekReview" disabled="{{loading}}">
+          <text class="btn-icon">📊</text>
+          <text>周复盘分析</text>
+          <text class="btn-desc">分析最近7天的交易记录</text>
+        </button>
+        <button class="period-btn" bindtap="generateMonthReview" disabled="{{loading}}">
+          <text class="btn-icon">📈</text>
+          <text>月复盘分析</text>
+          <text class="btn-desc">分析最近30天的交易记录</text>
+        </button>
+      </view>
+
+      <!-- 历史周期复盘列表 -->
+      <view class="history-section">
+        <view class="section-title">历史周期复盘</view>
+        <view class="period-list">
+          <view
+            wx:for="{{periodReviews}}"
+            wx:key="id"
+            class="period-item"
+            bindtap="loadPeriodReview"
+            data-id="{{item.id}}"
+          >
+            <view class="period-type">
+              <text class="type-label">{{item.type === 'week' ? '周复盘' : '月复盘'}}</text>
+              <text class="date-range">{{item.startDate}} ~ {{item.endDate}}</text>
+            </view>
+            <text class="analyze-time">生成于 {{formatDate(item.timestamp)}}</text>
+          </view>
+          <view wx:if="{{periodReviews.length === 0}}" class="empty-tip">暂无周期复盘记录</view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 周期复盘详情 -->
+    <view wx:if="{{periodReview}}" class="review-section">
+      <view class="period-header">
+        <text class="period-type">{{periodReview.type === 'week' ? '周复盘' : '月复盘'}}</text>
+        <text class="date-range">{{periodReview.startDate}} ~ {{periodReview.endDate}}</text>
+      </view>
+
+      <!-- 包含的每日复盘 -->
+      <view class="included-reviews">
+        <view class="section-label">包含的每日复盘 ({{dailyReviews.length}}篇)</view>
+        <view class="review-list">
+          <view
+            wx:for="{{dailyReviews}}"
+            wx:key="id"
+            class="review-item"
+            bindtap="viewDailyReview"
+            data-id="{{item.id}}"
+          >
+            <text class="review-date">{{item.date}}</text>
+            <text class="review-summary">{{item.summary}}</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- 行为标签分布 -->
+      <view wx:if="{{tagStats.length > 0}}" class="tags-section">
+        <view class="section-label">行为标签分布</view>
+        <view class="tag-list">
+          <view wx:for="{{tagStats}}" wx:key="tag" class="tag-row">
+            <text class="tag-name">{{item.tag}}</text>
+            <text class="tag-count">{{item.count}}次</text>
+            <view class="tag-bar">
+              <view class="tag-bar-fill" style="width: {{item.count / tagStats[0].count * 100}}%"></view>
+            </view>
+          </view>
+        </view>
+      </view>
+
+      <!-- 计划执行力趋势 -->
+      <view wx:if="{{trendData.length > 0}}" class="trend-section">
+        <view class="section-label">计划执行力趋势</view>
+        <view class="trend-list">
+          <view wx:for="{{trendData}}" wx:key="date" class="trend-row {{item.ratio === null ? 'no-trade' : ''}}">
+            <text class="trend-date">{{item.date}}</text>
+            <view wx:if="{{item.ratio === null}}" class="trend-none">—</view>
+            <view wx:else class="trend-data">
+              <text wx:if="{{item.ratio < 50}}" class="trend-warn">⚠️</text>
+              <view wx:else class="trend-spacer"></view>
+              <view class="trend-bar-container">
+                <view class="trend-bar-fill" style="width: {{item.ratio}}%"></view>
+              </view>
+              <text class="trend-pct">{{item.ratio}}%（{{item.planned}}/{{item.total}}）</text>
+            </view>
+          </view>
+        </view>
+        <view wx:if="{{trendStats}}" class="trend-summary">
+          <text>均值 {{trendStats.avg}}%</text>
+          <text>最低 {{trendStats.min}}%（{{trendStats.minDate}}）</text>
+        </view>
+      </view>
+
+      <!-- AI分析结果 -->
+      <view class="analysis-section">
+        <view class="section-label">AI分析</view>
+        <text class="ai-text">{{periodReview.aiAnalysis}}</text>
+      </view>
+    </view>
+  </scroll-view>
+</view>
