@@ -104,6 +104,7 @@
 
   <view class="footer">
     <button wx:if="{{!review.isDraft}}" class="action-btn edit" bindtap="onEdit">编辑</button>
+    <button class="action-btn share" bindtap="onShare">分享</button>
     <button class="action-btn delete" bindtap="onDelete">删除</button>
   </view>
 </view>

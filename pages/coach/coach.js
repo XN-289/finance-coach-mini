@@ -63,7 +63,9 @@ Page({
     reviewXML: '',
     formData: null,
     aiReply: '',
+    displayReply: '', // 打字机效果用
     loading: false,
+    streaming: false,
     error: false,
     errorMsg: '',
     conversationId: null,
@@ -195,11 +197,16 @@ Page({
 
       const updatedMessages = [...this.data.messages, newMessage]
 
+      // 先隐藏 loading，开始打字机效果
       this.setData({
         aiReply: cleanReply,
         loading: false,
+        streaming: true,
         messages: updatedMessages
       })
+
+      // 打字机效果
+      this.typewriterEffect(cleanReply)
 
       const updatedConversation = {
         ...storage.getConversationById(this.data.conversationId),
@@ -345,6 +352,24 @@ Page({
     const lines = pending.map((q, i) => (i + 1) + '. ' + q.question)
     return '\n\n---\n【上次追问（用户尚未回答）】\n' + lines.join('\n') +
       '\n请基于用户今天的操作，追问这些未回答的问题。如果用户今天的操作恰好触及了这些问题，指出关联。'
+  },
+
+  typewriterEffect(fullText) {
+    let index = 0
+    const speed = 20 // 每个字符间隔 ms
+    const chunkSize = 3 // 每次显示字符数
+
+    const type = () => {
+      if (index >= fullText.length) {
+        this.setData({ streaming: false })
+        return
+      }
+      index = Math.min(index + chunkSize, fullText.length)
+      this.setData({ displayReply: fullText.substring(0, index) })
+      setTimeout(type, speed)
+    }
+
+    type()
   },
 
   retryRequest() {

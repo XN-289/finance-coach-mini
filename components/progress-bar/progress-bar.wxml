@@ -1,0 +1,9 @@
+<view class="progress-container">
+  <view class="progress-header" wx:if="{{label}}">
+    <text class="progress-label">{{label}}</text>
+    <text class="progress-value">{{percent}}%</text>
+  </view>
+  <view class="progress-track">
+    <view class="progress-fill {{color}}" style="width: {{percent}}%"></view>
+  </view>
+</view>

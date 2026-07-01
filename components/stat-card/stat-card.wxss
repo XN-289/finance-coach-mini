@@ -1,0 +1,79 @@
+.stat-card {
+  display: flex;
+  align-items: center;
+  padding: 24rpx;
+  background: var(--card-bg, #fff);
+  border-radius: 12rpx;
+  box-shadow: 0 1rpx 4rpx rgba(0,0,0,0.04);
+  position: relative;
+}
+
+.stat-card.mini {
+  padding: 16rpx;
+}
+
+.stat-card.up .stat-value { color: #e4393c; }
+.stat-card.down .stat-value { color: #52c41a; }
+
+.stat-icon {
+  font-size: 40rpx;
+  margin-right: 20rpx;
+  width: 72rpx;
+  height: 72rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fef0f0;
+  border-radius: 16rpx;
+}
+
+.stat-card.mini .stat-icon {
+  width: 56rpx;
+  height: 56rpx;
+  font-size: 32rpx;
+  margin-right: 16rpx;
+}
+
+.stat-body {
+  flex: 1;
+}
+
+.stat-value {
+  font-size: 40rpx;
+  font-weight: 700;
+  color: #1a1a1a;
+  line-height: 1.2;
+}
+
+.stat-card.mini .stat-value {
+  font-size: 32rpx;
+}
+
+.stat-unit {
+  font-size: 22rpx;
+  font-weight: 400;
+  color: #999;
+  margin-left: 4rpx;
+}
+
+.stat-label {
+  font-size: 24rpx;
+  color: #999;
+  margin-top: 6rpx;
+}
+
+.stat-card.mini .stat-label {
+  font-size: 22rpx;
+}
+
+.stat-badge {
+  position: absolute;
+  top: 16rpx;
+  right: 16rpx;
+  font-size: 20rpx;
+  padding: 4rpx 12rpx;
+  border-radius: 16rpx;
+  background: #fef0f0;
+  color: #e4393c;
+  font-weight: 600;
+}

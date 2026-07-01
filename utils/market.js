@@ -173,9 +173,9 @@ function getMarketSnapshot() {
   return Promise.all([
     fetchIndex('1.000001'),
     fetchIndex('0.399001'),
-    fetchLimitStats()
-  ]).then(([sh, sz, limit]) => {
-    const sectors = []
+    fetchLimitStats(),
+    fetchSectorRanking()
+  ]).then(([sh, sz, limit, sectors]) => {
     const totalTurnover = (sh.turnover || 0) + (sz.turnover || 0)
     const totalUp = (sh.advancers || 0) + (sz.advancers || 0)
     const totalDown = (sh.decliners || 0) + (sz.decliners || 0)

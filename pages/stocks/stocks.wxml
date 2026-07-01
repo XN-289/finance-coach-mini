@@ -1,0 +1,102 @@
+<view class="container">
+  <!-- 顶部栏 -->
+  <view class="top-bar">
+    <text class="page-title">自选股</text>
+    <view class="top-actions">
+      <text class="refresh-btn {{refreshing ? 'spinning' : ''}}" bindtap="refreshQuotes">🔄</text>
+      <text class="add-btn" bindtap="toggleSearch">{{showSearch ? '取消' : '+ 添加'}}</text>
+    </view>
+  </view>
+
+  <!-- 搜索面板 -->
+  <view wx:if="{{showSearch}}" class="search-panel">
+    <view class="search-box">
+      <text class="search-icon">🔍</text>
+      <input
+        class="search-input"
+        placeholder="输入股票代码或名称"
+        value="{{searchKeyword}}"
+        bindinput="onSearchInput"
+        focus="{{showSearch}}"
+        confirm-type="search"
+      />
+      <text wx:if="{{searchKeyword}}" class="clear-btn" bindtap="clearSearch">✕</text>
+    </view>
+
+    <!-- 搜索结果 -->
+    <scroll-view wx:if="{{searchResults.length > 0}}" class="search-results" scroll-y>
+      <view
+        wx:for="{{searchResults}}"
+        wx:key="code"
+        class="search-result-item"
+      >
+        <view class="result-info">
+          <text class="result-name">{{item.name}}</text>
+          <text class="result-code">{{item.code}} · {{item.market}}</text>
+          <text class="result-type" wx:if="{{item.type !== '股票'}}">{{item.type}}</text>
+        </view>
+        <view
+          class="result-action {{item.inWatchlist ? 'in-list' : ''}}"
+          data-stock="{{item}}"
+          bindtap="{{item.inWatchlist ? '' : 'addStock'}}"
+        >
+          {{item.inWatchlist ? '已添加' : '+ 自选'}}
+        </view>
+      </view>
+    </scroll-view>
+
+    <view wx:if="{{isSearching}}" class="search-loading">
+      <view class="loading-spinner mini"></view>
+      <text>搜索中...</text>
+    </view>
+
+    <view wx:if="{{searchKeyword && !isSearching && searchResults.length === 0}}" class="search-empty">
+      <text>未找到相关股票</text>
+    </view>
+  </view>
+
+  <!-- 自选股列表 -->
+  <scroll-view class="watchlist-area" scroll-y>
+    <!-- 表头 -->
+    <view wx:if="{{watchlist.length > 0}}" class="list-header">
+      <text class="col-name">名称/代码</text>
+      <text class="col-price">最新价</text>
+      <text class="col-change">涨跌幅</text>
+      <text class="col-action">操作</text>
+    </view>
+
+    <view
+      wx:for="{{watchlist}}"
+      wx:key="code"
+      class="stock-card"
+      data-stock="{{item}}"
+      bindtap="viewStock"
+    >
+      <view class="stock-info">
+        <text class="stock-name">{{item.name}}</text>
+        <text class="stock-code">{{item.code}}</text>
+      </view>
+      <view class="stock-price-area">
+        <text class="stock-price {{item.quote && item.quote.changePct >= 0 ? 'up' : 'down'}}">
+          {{item.quote ? item.quote.price : '--'}}
+        </text>
+        <text class="stock-change {{item.quote && item.quote.changePct >= 0 ? 'up' : 'down'}}">
+          {{item.quote ? (item.quote.changePct >= 0 ? '+' : '') + item.quote.changePct + '%' : '--'}}
+        </text>
+      </view>
+      <view class="stock-action" data-code="{{item.code}}" data-name="{{item.name}}" catchtap="removeStock">
+        <text class="remove-text">移除</text>
+      </view>
+    </view>
+
+    <!-- 空状态 -->
+    <view wx:if="{{watchlist.length === 0 && !showSearch}}" class="empty-state">
+      <text class="empty-icon">📋</text>
+      <text class="empty-title">暂无自选股</text>
+      <text class="empty-desc">点击右上角"+ 添加"搜索并添加关注的股票</text>
+      <button class="empty-btn" bindtap="toggleSearch">添加自选股</button>
+    </view>
+
+    <view style="height: 180rpx;"></view>
+  </scroll-view>
+</view>

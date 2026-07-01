@@ -1,0 +1,38 @@
+.tag-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16rpx;
+  padding: 8rpx;
+}
+
+.tag-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 8rpx;
+  padding: 12rpx 20rpx;
+  border-radius: 24rpx;
+  background: #fef0f0;
+  color: #e4393c;
+  font-weight: 500;
+}
+
+.tag-item.high {
+  background: #e4393c;
+  color: #fff;
+}
+
+.tag-item.medium {
+  background: #fef0f0;
+  color: #e4393c;
+}
+
+.tag-item.low {
+  background: #f5f5f5;
+  color: #999;
+}
+
+.tag-count {
+  font-size: 20rpx;
+  opacity: 0.7;
+  margin-left: 4rpx;
+}

@@ -1,0 +1,103 @@
+<view class="container">
+  <scroll-view class="profile-scroll" scroll-y>
+    <!-- 用户卡片 -->
+    <view class="user-card">
+      <view class="avatar">📊</view>
+      <view class="user-info">
+        <text class="user-name">交易者</text>
+        <text class="user-motto">每日复盘，知行合一</text>
+      </view>
+    </view>
+
+    <!-- 快捷统计 -->
+    <view class="quick-stats">
+      <view class="qs-item">
+        <text class="qs-value">{{stats.totalDays || 0}}</text>
+        <text class="qs-label">复盘天数</text>
+      </view>
+      <view class="qs-divider"></view>
+      <view class="qs-item">
+        <text class="qs-value">{{stats.streakDays || 0}}</text>
+        <text class="qs-label">连续天数</text>
+      </view>
+      <view class="qs-divider"></view>
+      <view class="qs-item">
+        <text class="qs-value">{{stats.planAdherenceRate || 0}}%</text>
+        <text class="qs-label">执行率</text>
+      </view>
+    </view>
+
+    <!-- 功能菜单 -->
+    <view class="menu-section">
+      <view class="menu-title">数据与分析</view>
+      <view class="menu-item" bindtap="goToPeriod">
+        <text class="menu-icon">📈</text>
+        <text class="menu-text">周期复盘</text>
+        <text class="menu-arrow">›</text>
+      </view>
+      <view class="menu-item" bindtap="goToConversation">
+        <text class="menu-icon">💬</text>
+        <text class="menu-text">对话历史</text>
+        <text class="menu-arrow">›</text>
+      </view>
+    </view>
+
+    <view class="menu-section">
+      <view class="menu-title">数据管理</view>
+      <view class="menu-item" bindtap="exportData">
+        <text class="menu-icon">📤</text>
+        <text class="menu-text">导出备份</text>
+        <text class="menu-desc">复制到剪贴板</text>
+        <text class="menu-arrow">›</text>
+      </view>
+      <view class="menu-item" bindtap="importData">
+        <text class="menu-icon">📥</text>
+        <text class="menu-text">导入数据</text>
+        <text class="menu-desc">从剪贴板恢复</text>
+        <text class="menu-arrow">›</text>
+      </view>
+      <view class="menu-item" bindtap="cleanupData">
+        <text class="menu-icon">🧹</text>
+        <text class="menu-text">清理旧数据</text>
+        <text class="menu-desc">清理180天前对话</text>
+        <text class="menu-arrow">›</text>
+      </view>
+    </view>
+
+    <view class="menu-section">
+      <view class="menu-title">设置</view>
+      <view class="menu-item" bindtap="toggleTheme">
+        <text class="menu-icon">{{themeName === 'dark' ? '🌙' : '☀️'}}</text>
+        <text class="menu-text">深色模式</text>
+        <text class="menu-switch {{themeName === 'dark' ? 'on' : ''}}">
+          {{themeName === 'dark' ? '已开启' : '已关闭'}}
+        </text>
+      </view>
+      <view class="menu-item" bindtap="showAbout">
+        <text class="menu-icon">ℹ️</text>
+        <text class="menu-text">关于</text>
+        <text class="menu-desc">v{{version}}</text>
+        <text class="menu-arrow">›</text>
+      </view>
+    </view>
+
+    <!-- 存储用量 -->
+    <view class="storage-section" wx:if="{{storageUsage}}">
+      <view class="storage-title">本地存储</view>
+      <progress-bar
+        label="已使用 {{storageUsage.currentSize}}KB / {{storageUsage.limitSize}}KB"
+        percent="{{storageUsage.usagePercent}}"
+        color="{{storageUsage.usagePercent > 80 ? 'red' : storageUsage.usagePercent > 50 ? 'orange' : 'green'}}"
+      />
+    </view>
+
+    <!-- 危险操作 -->
+    <view class="danger-section">
+      <view class="danger-btn" bindtap="clearAllData">
+        <text>清空所有数据</text>
+      </view>
+    </view>
+
+    <view style="height: 180rpx;"></view>
+  </scroll-view>
+</view>

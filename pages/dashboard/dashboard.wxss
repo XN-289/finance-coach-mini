@@ -1,0 +1,308 @@
+/* 仪表盘样式 */
+.loading-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+
+.loading-page .loading-text {
+  margin-top: 20rpx;
+  color: #999;
+  font-size: 28rpx;
+}
+
+.dashboard-scroll {
+  height: 100vh;
+}
+
+/* 顶部总览 */
+.overview-hero {
+  background: linear-gradient(135deg, #e4393c 0%, #c1272d 100%);
+  padding: 40rpx 30rpx;
+  margin: 20rpx;
+  border-radius: 16rpx;
+  color: #fff;
+}
+
+.hero-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.hero-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.hero-value {
+  font-size: 48rpx;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.hero-label {
+  font-size: 22rpx;
+  opacity: 0.8;
+  margin-top: 8rpx;
+}
+
+.hero-divider {
+  width: 1rpx;
+  height: 60rpx;
+  background: rgba(255,255,255,0.3);
+}
+
+/* Tab 栏 */
+.tab-bar {
+  display: flex;
+  background: #fff;
+  margin: 0 20rpx;
+  border-radius: 12rpx;
+  overflow: hidden;
+  box-shadow: 0 1rpx 4rpx rgba(0,0,0,0.04);
+}
+
+.tab-item {
+  flex: 1;
+  text-align: center;
+  padding: 24rpx 0;
+  font-size: 28rpx;
+  color: #666;
+  position: relative;
+}
+
+.tab-item.active {
+  color: #e4393c;
+  font-weight: 600;
+}
+
+.tab-item.active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 30%;
+  right: 30%;
+  height: 4rpx;
+  background: #e4393c;
+  border-radius: 2rpx;
+}
+
+.tab-content {
+  padding: 20rpx;
+}
+
+/* 指标网格 */
+.stats-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16rpx;
+  margin-bottom: 20rpx;
+}
+
+.chart-section {
+  margin-bottom: 20rpx;
+}
+
+/* 通用卡片 */
+.section-card {
+  background: #fff;
+  border-radius: 12rpx;
+  padding: 28rpx;
+  margin-bottom: 20rpx;
+  box-shadow: 0 1rpx 4rpx rgba(0,0,0,0.04);
+}
+
+.card-title {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin-bottom: 20rpx;
+  padding-left: 16rpx;
+  border-left: 6rpx solid #e4393c;
+}
+
+/* 股票排行 */
+.stock-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+}
+
+.stock-row {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+}
+
+.stock-rank {
+  font-size: 24rpx;
+  font-weight: 700;
+  color: #e4393c;
+  width: 36rpx;
+  text-align: center;
+}
+
+.stock-name {
+  font-size: 26rpx;
+  color: #333;
+  width: 160rpx;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.stock-bar-wrap {
+  flex: 1;
+  height: 16rpx;
+  background: #f5f5f5;
+  border-radius: 8rpx;
+  overflow: hidden;
+}
+
+.stock-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #e4393c, #ff7875);
+  border-radius: 8rpx;
+  min-width: 4rpx;
+}
+
+.stock-count {
+  font-size: 22rpx;
+  color: #999;
+  width: 60rpx;
+  text-align: right;
+}
+
+/* 未执行计划 */
+.missed-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20rpx;
+}
+
+/* 时间分布 */
+.time-dist {
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+}
+
+.time-item {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+}
+
+.time-label {
+  font-size: 24rpx;
+  color: #666;
+  width: 60rpx;
+}
+
+.time-bar-track {
+  flex: 1;
+  height: 20rpx;
+  background: #f5f5f5;
+  border-radius: 10rpx;
+  overflow: hidden;
+}
+
+.time-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #1890ff, #69c0ff);
+  border-radius: 10rpx;
+  min-width: 4rpx;
+}
+
+.time-count {
+  font-size: 22rpx;
+  color: #999;
+  width: 60rpx;
+  text-align: right;
+}
+
+/* 市场数据 */
+.market-detail {
+  display: flex;
+  flex-direction: column;
+  gap: 20rpx;
+}
+
+.market-row {
+  display: flex;
+  gap: 20rpx;
+}
+
+.market-item {
+  flex: 1;
+  background: #fafafa;
+  border-radius: 12rpx;
+  padding: 20rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.market-name {
+  font-size: 24rpx;
+  color: #666;
+  margin-bottom: 8rpx;
+}
+
+.market-price {
+  font-size: 36rpx;
+  font-weight: 700;
+}
+
+.market-price.up, .market-change.up { color: #e4393c; }
+.market-price.down, .market-change.down { color: #52c41a; }
+
+.market-change {
+  font-size: 24rpx;
+  margin-top: 4rpx;
+}
+
+.market-stats-row {
+  display: flex;
+  gap: 12rpx;
+}
+
+.market-stat {
+  flex: 1;
+  background: #fafafa;
+  border-radius: 8rpx;
+  padding: 16rpx;
+  text-align: center;
+}
+
+.market-stat-label {
+  font-size: 20rpx;
+  color: #999;
+  display: block;
+}
+
+.market-stat-value {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin-top: 4rpx;
+}
+
+.market-stat-value.up { color: #e4393c; }
+.market-stat-value.down { color: #52c41a; }
+
+.empty-card {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 200rpx;
+}
+
+.empty-text {
+  color: #999;
+  font-size: 28rpx;
+}

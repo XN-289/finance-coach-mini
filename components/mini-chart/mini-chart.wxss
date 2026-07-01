@@ -1,0 +1,146 @@
+.mini-chart {
+  background: #fff;
+  border-radius: 12rpx;
+  padding: 24rpx;
+}
+
+.chart-title {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin-bottom: 20rpx;
+}
+
+/* 柱状图 */
+.bar-chart {
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+}
+
+.bar-row {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+}
+
+.bar-label {
+  font-size: 22rpx;
+  color: #666;
+  width: 80rpx;
+  text-align: right;
+}
+
+.bar-track {
+  flex: 1;
+  height: 20rpx;
+  background: #f5f5f5;
+  border-radius: 10rpx;
+  overflow: hidden;
+}
+
+.bar-fill {
+  height: 100%;
+  border-radius: 10rpx;
+  transition: width 0.6s ease;
+  min-width: 4rpx;
+}
+
+.bar-value {
+  font-size: 22rpx;
+  font-weight: 600;
+  color: #1a1a1a;
+  width: 60rpx;
+  text-align: right;
+}
+
+/* 趋势图 */
+.trend-chart {
+  display: flex;
+  flex-direction: column;
+}
+
+.trend-bars {
+  display: flex;
+  align-items: flex-end;
+  gap: 8rpx;
+  height: 200rpx;
+  padding-bottom: 10rpx;
+}
+
+.trend-bar {
+  flex: 1;
+  min-height: 8rpx;
+  border-radius: 4rpx 4rpx 0 0;
+  position: relative;
+  transition: height 0.4s ease;
+}
+
+.trend-tooltip {
+  position: absolute;
+  top: -32rpx;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 18rpx;
+  color: #666;
+  white-space: nowrap;
+}
+
+.trend-labels {
+  display: flex;
+  gap: 8rpx;
+}
+
+.trend-label {
+  flex: 1;
+  text-align: center;
+  font-size: 18rpx;
+  color: #999;
+  margin-top: 8rpx;
+}
+
+/* 环形图 */
+.ring-chart {
+  display: flex;
+  justify-content: center;
+  padding: 20rpx 0;
+}
+
+.ring-outer {
+  width: 180rpx;
+  height: 180rpx;
+  border-radius: 50%;
+  position: relative;
+}
+
+.ring-fill {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+}
+
+.ring-inner {
+  position: absolute;
+  top: 20rpx;
+  left: 20rpx;
+  right: 20rpx;
+  bottom: 20rpx;
+  background: #fff;
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.ring-value {
+  font-size: 36rpx;
+  font-weight: 700;
+  color: #1a1a1a;
+}
+
+.ring-label {
+  font-size: 20rpx;
+  color: #999;
+  margin-top: 4rpx;
+}

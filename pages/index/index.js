@@ -429,52 +429,6 @@ Page({
     }
   },
 
-  formatReview(data) {
-    const sections = []
-
-    if (this.data.marketText) {
-      sections.push(`【市场数据】\n${this.data.marketText}`)
-    }
-
-    if (data.market) {
-      sections.push(`\n【大盘记录】\n${data.market}`)
-    }
-
-    if (data.theme) {
-      sections.push(`\n【题材与主线】\n${data.theme}`)
-    }
-
-    sections.push(`\n【知行合一】`)
-
-    data.buyList.forEach((item, i) => {
-      if (item.stock || item.reason) {
-        sections.push(`\n买入${i + 1}：${item.stock || '-'}\n理由：${item.reason || '-'}\n符合计划：${item.matchPlan ? '是' : '否'}`)
-      }
-    })
-
-    data.sellList.forEach((item, i) => {
-      if (item.stock || item.reason) {
-        sections.push(`\n卖出${i + 1}：${item.stock || '-'}\n理由：${item.reason || '-'}\n符合计划：${item.matchPlan ? '是' : '否'}`)
-      }
-    })
-
-    data.missedList.forEach((item, i) => {
-      if (item.what || item.why) {
-        sections.push(`\n未执行计划${i + 1}：\n原计划：${item.what || '-'}\n原因：${item.why || '-'}`)
-      }
-    })
-
-    if (data.selfAssessment) {
-      sections.push(`\n【自我评价】\n${data.selfAssessment}`)
-    }
-
-    if (data.tomorrow) {
-      sections.push(`\n【明日If-Then计划】\n${data.tomorrow}`)
-    }
-
-    return sections.join('\n')
-  },
-
   formatReviewXML(data) {
     let xml = '<review>\n'
 

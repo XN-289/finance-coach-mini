@@ -1,0 +1,14 @@
+<view class="tag-cloud">
+  <view
+    wx:for="{{tags}}"
+    wx:key="name"
+    class="tag-item {{item.level}}"
+    style="font-size: {{item.size}}rpx;"
+    bindtap="onTagTap"
+    data-name="{{item.name}}"
+  >
+    <text>{{item.name}}</text>
+    <text class="tag-count">{{item.count}}</text>
+  </view>
+  <view wx:if="{{tags.length === 0}}" class="empty-tip">暂无标签数据</view>
+</view>

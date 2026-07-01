@@ -1,0 +1,9 @@
+{
+  "navigationBarTitleText": "数据仪表盘",
+  "usingComponents": {
+    "stat-card": "/components/stat-card/stat-card",
+    "mini-chart": "/components/mini-chart/mini-chart",
+    "tag-cloud": "/components/tag-cloud/tag-cloud",
+    "progress-bar": "/components/progress-bar/progress-bar"
+  }
+}

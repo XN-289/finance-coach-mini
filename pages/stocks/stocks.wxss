@@ -1,0 +1,272 @@
+/* 自选股页面样式 */
+.top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20rpx 24rpx;
+  background: #fff;
+  border-bottom: 1rpx solid #f0f0f0;
+}
+
+.page-title {
+  font-size: 36rpx;
+  font-weight: 700;
+  color: #1a1a1a;
+}
+
+.top-actions {
+  display: flex;
+  align-items: center;
+  gap: 20rpx;
+}
+
+.refresh-btn {
+  font-size: 36rpx;
+  transition: transform 0.3s;
+}
+
+.refresh-btn.spinning {
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.add-btn {
+  font-size: 28rpx;
+  color: #e4393c;
+  font-weight: 600;
+  padding: 8rpx 20rpx;
+  background: #fef0f0;
+  border-radius: 20rpx;
+}
+
+/* 搜索面板 */
+.search-panel {
+  background: #fff;
+  padding: 20rpx;
+  border-bottom: 1rpx solid #f0f0f0;
+}
+
+.search-box {
+  display: flex;
+  align-items: center;
+  background: #f5f6f8;
+  border-radius: 12rpx;
+  padding: 16rpx 20rpx;
+  gap: 12rpx;
+}
+
+.search-icon {
+  font-size: 28rpx;
+}
+
+.search-input {
+  flex: 1;
+  font-size: 28rpx;
+  color: #333;
+}
+
+.clear-btn {
+  font-size: 28rpx;
+  color: #999;
+  padding: 0 8rpx;
+}
+
+.search-results {
+  max-height: 600rpx;
+  margin-top: 16rpx;
+}
+
+.search-result-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20rpx 12rpx;
+  border-bottom: 1rpx solid #f5f5f5;
+}
+
+.result-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4rpx;
+}
+
+.result-name {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+.result-code {
+  font-size: 24rpx;
+  color: #999;
+}
+
+.result-type {
+  font-size: 20rpx;
+  color: #1890ff;
+  background: #e6f7ff;
+  padding: 2rpx 12rpx;
+  border-radius: 8rpx;
+  align-self: flex-start;
+  margin-top: 4rpx;
+}
+
+.result-action {
+  font-size: 24rpx;
+  color: #e4393c;
+  font-weight: 600;
+  padding: 10rpx 24rpx;
+  border: 1rpx solid #e4393c;
+  border-radius: 20rpx;
+}
+
+.result-action.in-list {
+  color: #999;
+  border-color: #d9d9d9;
+  background: #f5f5f5;
+}
+
+.search-loading, .search-empty {
+  text-align: center;
+  padding: 30rpx;
+  color: #999;
+  font-size: 26rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12rpx;
+}
+
+.loading-spinner.mini {
+  width: 32rpx;
+  height: 32rpx;
+  border: 3rpx solid #f0f0f0;
+  border-top: 3rpx solid #e4393c;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+/* 自选股列表 */
+.watchlist-area {
+  flex: 1;
+}
+
+.list-header {
+  display: flex;
+  padding: 16rpx 24rpx;
+  background: #fafafa;
+  font-size: 22rpx;
+  color: #999;
+}
+
+.col-name { flex: 2; }
+.col-price { flex: 1.5; text-align: right; }
+.col-change { flex: 1.5; text-align: right; }
+.col-action { width: 100rpx; text-align: center; }
+
+.stock-card {
+  display: flex;
+  align-items: center;
+  padding: 24rpx;
+  background: #fff;
+  border-bottom: 1rpx solid #f5f5f5;
+}
+
+.stock-card:active {
+  background: #fafafa;
+}
+
+.stock-info {
+  flex: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 4rpx;
+}
+
+.stock-name {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+.stock-code {
+  font-size: 24rpx;
+  color: #999;
+}
+
+.stock-price-area {
+  flex: 1.5;
+  text-align: right;
+  display: flex;
+  flex-direction: column;
+  gap: 4rpx;
+}
+
+.stock-price {
+  font-size: 32rpx;
+  font-weight: 700;
+}
+
+.stock-price.up, .stock-change.up { color: #e4393c; }
+.stock-price.down, .stock-change.down { color: #52c41a; }
+
+.stock-change {
+  font-size: 24rpx;
+}
+
+.stock-action {
+  width: 100rpx;
+  text-align: center;
+}
+
+.remove-text {
+  font-size: 24rpx;
+  color: #999;
+  padding: 8rpx 16rpx;
+}
+
+/* 空状态 */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 120rpx 40rpx;
+}
+
+.empty-icon {
+  font-size: 80rpx;
+  margin-bottom: 24rpx;
+}
+
+.empty-title {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 12rpx;
+}
+
+.empty-desc {
+  font-size: 26rpx;
+  color: #999;
+  text-align: center;
+  margin-bottom: 40rpx;
+}
+
+.empty-btn {
+  background: #e4393c;
+  color: #fff;
+  font-size: 28rpx;
+  border-radius: 8rpx;
+  padding: 0 40rpx;
+  height: 80rpx;
+  line-height: 80rpx;
+}
+
+.empty-btn::after {
+  border: none;
+}

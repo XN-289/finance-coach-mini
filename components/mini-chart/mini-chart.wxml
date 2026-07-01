@@ -1,0 +1,44 @@
+<view class="mini-chart">
+  <view class="chart-title" wx:if="{{title}}">{{title}}</view>
+  <view class="chart-area">
+    <!-- 柱状图 -->
+    <view wx:if="{{type === 'bar'}}" class="bar-chart">
+      <view class="bar-row" wx:for="{{chartData}}" wx:key="label">
+        <text class="bar-label">{{item.label}}</text>
+        <view class="bar-track">
+          <view class="bar-fill" style="width: {{item.percent}}%; background: {{item.color || '#e4393c'}}"></view>
+        </view>
+        <text class="bar-value">{{item.value}}</text>
+      </view>
+    </view>
+
+    <!-- 趋势线（用方块模拟） -->
+    <view wx:if="{{type === 'trend'}}" class="trend-chart">
+      <view class="trend-bars">
+        <view
+          wx:for="{{chartData}}"
+          wx:key="label"
+          class="trend-bar"
+          style="height: {{item.height}}%; background: {{item.color || '#e4393c'}}"
+        >
+          <view class="trend-tooltip">{{item.value}}</view>
+        </view>
+      </view>
+      <view class="trend-labels">
+        <text wx:for="{{chartData}}" wx:key="label" class="trend-label">{{item.label}}</text>
+      </view>
+    </view>
+
+    <!-- 环形进度 -->
+    <view wx:if="{{type === 'ring'}}" class="ring-chart">
+      <view class="ring-outer">
+        <view class="ring-bg"></view>
+        <view class="ring-fill" style="background: conic-gradient({{ringColor}} {{ringPercent}}%, #f0f0f0 {{ringPercent}}%)"></view>
+        <view class="ring-inner">
+          <text class="ring-value">{{value}}</text>
+          <text class="ring-label" wx:if="{{subtitle}}">{{subtitle}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

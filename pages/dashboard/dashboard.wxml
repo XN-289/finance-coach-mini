@@ -1,0 +1,214 @@
+<view class="container">
+  <!-- 加载态 -->
+  <view wx:if="{{loading}}" class="loading-page">
+    <view class="loading-spinner"></view>
+    <text class="loading-text">加载数据中...</text>
+  </view>
+
+  <scroll-view wx:else class="dashboard-scroll" scroll-y enhanced show-scrollbar="{{false}}">
+    <!-- 顶部总览卡片 -->
+    <view class="overview-hero">
+      <view class="hero-row">
+        <view class="hero-stat">
+          <text class="hero-value">{{stats.totalDays || 0}}</text>
+          <text class="hero-label">复盘天数</text>
+        </view>
+        <view class="hero-divider"></view>
+        <view class="hero-stat">
+          <text class="hero-value">{{stats.totalTrades || 0}}</text>
+          <text class="hero-label">总交易次数</text>
+        </view>
+        <view class="hero-divider"></view>
+        <view class="hero-stat">
+          <text class="hero-value">{{stats.streakDays || 0}}</text>
+          <text class="hero-label">连续复盘</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- Tab 切换 -->
+    <view class="tab-bar">
+      <view class="tab-item {{activeTab === 'overview' ? 'active' : ''}}" data-tab="overview" bindtap="switchTab">
+        <text>总览</text>
+      </view>
+      <view class="tab-item {{activeTab === 'behavior' ? 'active' : ''}}" data-tab="behavior" bindtap="switchTab">
+        <text>行为分析</text>
+      </view>
+      <view class="tab-item {{activeTab === 'market' ? 'active' : ''}}" data-tab="market" bindtap="switchTab">
+        <text>市场数据</text>
+      </view>
+    </view>
+
+    <!-- 总览 Tab -->
+    <view wx:if="{{activeTab === 'overview'}}" class="tab-content">
+      <!-- 核心指标网格 -->
+      <view class="stats-grid">
+        <stat-card
+          icon="📊"
+          value="{{stats.planAdherenceRate || 0}}"
+          unit="%"
+          label="计划执行率"
+        />
+        <stat-card
+          icon="🎯"
+          value="{{stats.winRate || 0}}"
+          unit="%"
+          label="卖出执行率"
+        />
+        <stat-card
+          icon="📈"
+          value="{{stats.buyCount || 0}}"
+          label="买入次数"
+        />
+        <stat-card
+          icon="📉"
+          value="{{stats.sellCount || 0}}"
+          label="卖出次数"
+        />
+        <stat-card
+          icon="❌"
+          value="{{stats.missedCount || 0}}"
+          label="未执行计划"
+        />
+        <stat-card
+          icon="📝"
+          value="{{stats.avgTradesPerDay || 0}}"
+          label="日均交易"
+        />
+      </view>
+
+      <!-- 执行率趋势图 -->
+      <view class="chart-section">
+        <mini-chart
+          title="近14天执行率趋势"
+          type="trend"
+          chartData="{{adherenceTrendData}}"
+        />
+      </view>
+
+      <!-- 周活跃度 -->
+      <view class="chart-section">
+        <mini-chart
+          title="近8周复盘活跃度"
+          type="bar"
+          chartData="{{weeklyBarData}}"
+        />
+      </view>
+
+      <!-- 最常交易的股票 -->
+      <view wx:if="{{stats.topStocks.length > 0}}" class="chart-section">
+        <view class="section-card">
+          <view class="card-title">最常交易的股票</view>
+          <view class="stock-list">
+            <view wx:for="{{stats.topStocks}}" wx:key="name" class="stock-row">
+              <text class="stock-rank">{{index + 1}}</text>
+              <text class="stock-name">{{item.name}}</text>
+              <view class="stock-bar-wrap">
+                <view class="stock-bar" style="width: {{stats.topStocks[0].total > 0 ? (item.total / stats.topStocks[0].total * 100) : 0}}%"></view>
+              </view>
+              <text class="stock-count">{{item.total}}次</text>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 行为分析 Tab -->
+    <view wx:if="{{activeTab === 'behavior'}}" class="tab-content">
+      <!-- 行为标签云 -->
+      <view class="section-card">
+        <view class="card-title">行为标签分布</view>
+        <tag-cloud data="{{stats.tagDistribution}}" bind:tagtap="onTagTap" />
+      </view>
+
+      <!-- 月度趋势 -->
+      <view class="chart-section">
+        <mini-chart
+          title="月度交易趋势"
+          type="bar"
+          chartData="{{monthlyTradeData}}"
+        />
+      </view>
+
+      <!-- 常见遗漏计划 -->
+      <view wx:if="{{stats.mostCommonMissed.length > 0}}" class="section-card">
+        <view class="card-title">最常遗漏的计划</view>
+        <view class="missed-list">
+          <view wx:for="{{stats.mostCommonMissed}}" wx:key="action" class="missed-row">
+            <progress-bar label="{{item.action}}" percent="{{item.count / stats.missedCount * 100}}" color="orange" />
+          </view>
+        </view>
+      </view>
+
+      <!-- 复盘时间分布 -->
+      <view class="section-card">
+        <view class="card-title">复盘时间偏好</view>
+        <view class="time-dist">
+          <view wx:for="{{stats.reviewTimeDistribution}}" wx:key="period" class="time-item">
+            <text class="time-label">{{item.period}}</text>
+            <view class="time-bar-track">
+              <view class="time-bar-fill" style="width: {{item.count / stats.totalDays * 100}}%"></view>
+            </view>
+            <text class="time-count">{{item.count}}天</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 市场数据 Tab -->
+    <view wx:if="{{activeTab === 'market'}}" class="tab-content">
+      <!-- 实时行情 -->
+      <view wx:if="{{marketData}}" class="section-card">
+        <view class="card-title">今日市场概览</view>
+        <view class="market-detail">
+          <view class="market-row">
+            <view class="market-item">
+              <text class="market-name">{{marketData.raw.sh.name}}</text>
+              <text class="market-price {{marketData.raw.sh.changePct >= 0 ? 'up' : 'down'}}">
+                {{marketData.raw.sh.price}}
+              </text>
+              <text class="market-change {{marketData.raw.sh.changePct >= 0 ? 'up' : 'down'}}">
+                {{marketData.raw.sh.changePct >= 0 ? '+' : ''}}{{marketData.raw.sh.changePct}}%
+              </text>
+            </view>
+            <view class="market-item">
+              <text class="market-name">{{marketData.raw.sz.name}}</text>
+              <text class="market-price {{marketData.raw.sz.changePct >= 0 ? 'up' : 'down'}}">
+                {{marketData.raw.sz.price}}
+              </text>
+              <text class="market-change {{marketData.raw.sz.changePct >= 0 ? 'up' : 'down'}}">
+                {{marketData.raw.sz.changePct >= 0 ? '+' : ''}}{{marketData.raw.sz.changePct}}%
+              </text>
+            </view>
+          </view>
+
+          <view class="market-stats-row">
+            <view class="market-stat">
+              <text class="market-stat-label">成交量</text>
+              <text class="market-stat-value">{{marketData.raw.totalTurnover}}亿</text>
+            </view>
+            <view class="market-stat">
+              <text class="market-stat-label">涨跌比</text>
+              <text class="market-stat-value">{{marketData.raw.totalUp}}/{{marketData.raw.totalDown}}</text>
+            </view>
+            <view class="market-stat">
+              <text class="market-stat-label">涨停</text>
+              <text class="market-stat-value up">{{marketData.raw.limitUp}}</text>
+            </view>
+            <view class="market-stat">
+              <text class="market-stat-label">跌停</text>
+              <text class="market-stat-value down">{{marketData.raw.limitDown}}</text>
+            </view>
+          </view>
+        </view>
+      </view>
+
+      <view wx:if="{{!marketData}}" class="section-card empty-card">
+        <text class="empty-text">市场数据暂不可用</text>
+      </view>
+    </view>
+
+    <!-- 底部安全区 -->
+    <view style="height: 180rpx;"></view>
+  </scroll-view>
+</view>

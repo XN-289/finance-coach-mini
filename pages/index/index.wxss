@@ -638,6 +638,38 @@
   opacity: 0.5;
 }
 
+/* 浮动历史按钮 */
+.fab-history {
+  position: fixed;
+  right: 30rpx;
+  bottom: 240rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100rpx;
+  height: 100rpx;
+  background: #e4393c;
+  border-radius: 50rpx;
+  box-shadow: 0 4rpx 16rpx rgba(228, 57, 60, 0.4);
+  z-index: 50;
+}
+
+.fab-history:active {
+  transform: scale(0.92);
+  opacity: 0.9;
+}
+
+.fab-icon {
+  font-size: 32rpx;
+}
+
+.fab-text {
+  font-size: 18rpx;
+  color: #fff;
+  margin-top: 2rpx;
+}
+
 /* 底部按钮 — 首页增强 */
 .footer {
   padding: 20rpx 24rpx;

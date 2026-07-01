@@ -1,4 +1,5 @@
 const storage = require('../../utils/storage')
+const { generateShareText } = require('../../utils/export')
 
 Page({
   data: {
@@ -23,6 +24,17 @@ Page({
 
   onBack() {
     wx.navigateBack()
+  },
+
+  onShare() {
+    if (!this.data.review) return
+    const text = generateShareText(this.data.review)
+    wx.setClipboardData({
+      data: text,
+      success: () => {
+        wx.showToast({ title: '已复制分享文本', icon: 'success' })
+      }
+    })
   },
 
   onEdit() {

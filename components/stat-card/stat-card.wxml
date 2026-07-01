@@ -1,0 +1,8 @@
+<view class="stat-card {{size}} {{trend}}" bindtap="onTap">
+  <view class="stat-icon" wx:if="{{icon}}">{{icon}}</view>
+  <view class="stat-body">
+    <view class="stat-value">{{value}}<text class="stat-unit" wx:if="{{unit}}">{{unit}}</text></view>
+    <view class="stat-label">{{label}}</view>
+  </view>
+  <view class="stat-badge" wx:if="{{badge}}">{{badge}}</view>
+</view>

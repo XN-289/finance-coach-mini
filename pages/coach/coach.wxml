@@ -7,16 +7,20 @@
 
     <view wx:if="{{aiReply}}" class="ai-section">
       <view class="section-header">
-        <view class="section-title">交易教练</view>
-        <text class="copy-btn" bindtap="copyReply">复制</text>
+        <view class="section-title">严正教练</view>
+        <view class="ai-actions">
+          <text wx:if="{{streaming}}" class="streaming-badge">输出中...</text>
+          <text class="copy-btn" bindtap="copyReply">复制</text>
+        </view>
       </view>
-      <text class="ai-text" user-select="true">{{aiReply}}</text>
+      <text class="ai-text" user-select="true">{{streaming ? displayReply : aiReply}}</text>
+      <view wx:if="{{streaming}}" class="typing-cursor">|</view>
     </view>
 
     <view wx:if="{{loading}}" class="loading">
-      <text class="loading-text">教练正在分析<span class="loading-dots">...</span></text>
+      <text class="loading-text">严正教练正在深度分析<span class="loading-dots">...</span></text>
       <view class="loading-spinner"></view>
-      <text class="loading-tip">请稍候，深度分析需要更长时间</text>
+      <text class="loading-tip">结合历史复盘与市场数据，请稍候</text>
     </view>
 
     <view wx:if="{{error}}" class="error-section">

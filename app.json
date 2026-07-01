@@ -1,13 +1,53 @@
 {
   "pages": [
     "pages/index/index",
+    "pages/dashboard/dashboard",
+    "pages/stocks/stocks",
+    "pages/profile/profile",
     "pages/coach/coach",
     "pages/history/history",
     "pages/period/period",
     "pages/conversation/conversation"
   ],
   "window": {
-    "navigationBarTitleText": "交易教练"
+    "navigationBarTitleText": "交易教练",
+    "navigationBarBackgroundColor": "#e4393c",
+    "navigationBarTextStyle": "white",
+    "backgroundColor": "#f5f6f8",
+    "backgroundTextStyle": "dark"
   },
-  "lazyCodeLoading": "requiredComponents"
+  "tabBar": {
+    "color": "#999999",
+    "selectedColor": "#e4393c",
+    "backgroundColor": "#ffffff",
+    "borderStyle": "white",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "复盘",
+        "iconPath": "assets/icons/tab-review.png",
+        "selectedIconPath": "assets/icons/tab-review-active.png"
+      },
+      {
+        "pagePath": "pages/dashboard/dashboard",
+        "text": "数据",
+        "iconPath": "assets/icons/tab-dashboard.png",
+        "selectedIconPath": "assets/icons/tab-dashboard-active.png"
+      },
+      {
+        "pagePath": "pages/stocks/stocks",
+        "text": "自选",
+        "iconPath": "assets/icons/tab-stocks.png",
+        "selectedIconPath": "assets/icons/tab-stocks-active.png"
+      },
+      {
+        "pagePath": "pages/profile/profile",
+        "text": "我的",
+        "iconPath": "assets/icons/tab-profile.png",
+        "selectedIconPath": "assets/icons/tab-profile-active.png"
+      }
+    ]
+  },
+  "lazyCodeLoading": "requiredComponents",
+  "sitemapLocation": "sitemap.json"
 }
