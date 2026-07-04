@@ -130,30 +130,36 @@ coach 页面 onLoad
 
 ### 3.1 整体架构
 
-```
-┌───────────────────────────────────────────────────────┐
-│                     微信小程序客户端                     │
-├──────────────┬────────────────┬───────────────────────┤
-│    页面层      │    组件层       │      工具层            │
-│              │                │                       │
-│  index       │  stat-card     │  storage.js  (数据持久化) │
-│  dashboard   │  mini-chart    │  api.js      (AI 调用)   │
-│  stocks      │  tag-cloud     │  market.js   (行情拉取)   │
-│  profile     │  progress-bar  │  stats.js    (统计引擎)   │
-│  coach       │                │  theme.js    (主题管理)   │
-│  history     │                │  stockSearch (股票搜索)   │
-│  period      │                │  export.js   (数据导出)   │
-│  conversation│                │  date.js     (日期工具)   │
-├──────────────┴────────────────┴───────────────────────┤
-│              设计系统（CSS 变量 + 通用样式）               │
-│  --primary: #D4574E  --bg: #F8F5F2  --card-bg: #fff   │
-├───────────────────────────────────────────────────────┤
-│              微信原生 API                                │
-│  wx.setStorageSync / wx.request / wx.navigateTo        │
-├───────────────────────────────────────────────────────┤
-│           外部服务                                      │
-│  DeepSeek API (AI)  东方财富 API (行情)                  │
-└───────────────────────────────────────────────────────┘
+```text
+┌───────────────────────────────────────────────────────────┐
+│                      微信小程序客户端                        │
+├───────────────┬──────────────────┬─────────────────────────┤
+│    页面层       │    组件层         │      工具层              │
+│               │                  │                         │
+│  index        │  stat-card       │  storage.js   (数据持久化) │
+│  dashboard    │  mini-chart      │  api.js       (AI 调用)   │
+│               │                  │  agent.js     (Agent 引擎) │
+│               │                  │  ai-tools.js  (工具注册表)  │
+│  stocks       │  tag-cloud       │  agent.js     (Agent 引擎) │
+│  profile      │  progress-bar    │  ai-tools.js  (工具注册表)  │
+│  coach        │                  │  market.js    (行情拉取)   │
+│  history      │                  │  stats.js     (统计引擎)   │
+│  period       │                  │  theme.js     (主题管理)   │
+│  conversation │                  │  stockSearch  (股票搜索)   │
+│               │                  │  export.js    (数据导出)   │
+├───────────────┴──────────────────┴─────────────────────────┤
+│                设计系统（CSS 变量 + 通用样式）                  │
+│    --primary: #D4574E  --bg: #F8F5F2  --card-bg: #fff      │
+├────────────────────────────────────────────────────────────┤
+│                AI Agent 引擎 (Harness + Loop)               │
+│    Phase 1: 工具调用 → Phase 2: 分析生成 → Phase 3: 自我反思  │
+├────────────────────────────────────────────────────────────┤
+│                微信原生 API                                   │
+│    wx.setStorageSync / wx.request / wx.navigateTo           │
+├────────────────────────────────────────────────────────────┤
+│                外部服务                                      │
+│    DeepSeek API (AI)  东方财富 API (行情)                     │
+└────────────────────────────────────────────────────────────┘
 ```
 
 ### 3.2 技术选型与理由
@@ -239,38 +245,81 @@ computeAllStats(reviews) → {
 - 如何处理空数据？（返回合理的默认值，而非 null/undefined）
 - 性能考虑？（数据量小时无需优化，数据量大时可加 memoization）
 
-### 4.2 AI 调用模块（api.js + coach.js）
+### 4.2 AI Agent 架构（核心亮点）
 
-**api.js 职责：** 封装 wx.request 调用 DeepSeek API。
+这不是简单的"调一次 API 拿结果"，而是实现了 **Harness + Loop** 两个 Agent 核心模式。
 
-```javascript
-callAI(messages, options) → Promise<string>
+**架构图：**
+
+```
+用户提交复盘
+    │
+    ▼
+┌─────────────────────────────────────┐
+│         Agent 引擎 (agent.js)        │
+│                                     │
+│  Phase 1: 工具调用 (Harness)         │
+│    ├─ AI 决定需要哪些工具            │
+│    ├─ 执行工具，获取数据             │
+│    └─ 工具结果注入上下文             │
+│                                     │
+│  Phase 2: 分析生成                   │
+│    └─ AI 基于工具数据生成深度分析     │
+│                                     │
+│  Phase 3: 自我反思 (Loop)            │
+│    ├─ AI 检查自己的输出是否有遗漏     │
+│    └─ 如有遗漏，补充内容             │
+│                                     │
+└─────────────────────────────────────┘
+    │
+    ▼
+最终结果（含工具调用记录 + 反思补充）
 ```
 
-- 支持 temperature、max_tokens、timeout 配置
-- 错误分类：超时、网络失败、API 异常
-- 返回纯文本（非流式，流式需要后端代理）
+**ai-tools.js — 工具注册表：**
 
-**coach.js 职责：** 组装 Prompt、调用 API、处理响应。
+| 工具名 | 职责 | 返回数据 |
+|--------|------|---------|
+| get_review_history | 获取最近 N 条复盘 | 买卖操作、标签、自评 |
+| get_pending_questions | 获取未回答的追问 | 问题列表 |
+| get_market_data | 获取实时行情 | 指数、涨跌停、板块 |
+| get_trading_stats | 获取统计数据 | 执行率、连续天数、标签分布 |
+| get_tag_trend | 获取标签趋势 | 某个标签的出现频率变化 |
 
-**Prompt 工程（核心竞争力）：**
+**agent.js — Agent 引擎：**
+
+```javascript
+runAgent({ systemPrompt, userMessage, onProgress })
+  → { reply, toolCalls, reflections, metadata }
+```
+
+三阶段流程：
+1. **Harness（工具调用）**：AI 分析用户复盘，决定需要调用哪些工具（如"用户提到了茅台，我需要查历史操作"），工具返回结果后注入上下文
+2. **分析生成**：AI 基于工具数据生成深度分析，引用具体数字
+3. **Loop（自我反思）**：AI 检查自己的输出是否有遗漏（如"是否忽略了用户自评中的关键信息"），如有则补充
+
+**coach.js 职责：** 调用 Agent 引擎、处理进度回调、展示结果。
+
+**Prompt 工程：**
 
 System Prompt 定义了：
 1. **人设**："严正"——严肃直击要害的交易教练
 2. **分析框架**：5 步分析法（行为对比 → 未执行计划深挖 → 知行合一审计 → 认知偏差诊断 → 市场匹配度）
 3. **输出结构**：对比诊断 → 操作审计 → 认知陷阱 → 必须回答的问题 → 改进清单 → 今日金句
 4. **标签提取**：`__TAGS__:["标签1","标签2"]` 格式，正则解析
+5. **工具调用格式**：`__TOOL_CALL__:{"name":"tool_name","params":{...}}`
 
-**纵向对比机制：**
-- 自动拉取最近 5 条复盘，注入 User Message
-- 未回答的追问也会注入，形成"记忆闭环"
-- 实时行情数据注入，让 AI 能判断"市场匹配度"
+**记忆闭环机制：**
+- get_pending_questions 工具自动获取未回答追问
+- 追问注入 AI 上下文，形成跨复盘的连续对话
+- 用户标记"已答"后，追问不再出现
 
 **面试可讲的点：**
-- Prompt Engineering 的设计思路
-- 为什么用 XML 格式传数据？（结构化、可解析、防注入）
-- 如何实现"记忆闭环"？（pendingQuestions 机制）
-- 打字机效果的实现（setTimeout 递归 + chunkSize 控制速度）
+- **Harness 模式**：AI 不是直接回答，而是先调用工具获取数据再回答。这和 ReAct（Reasoning + Acting）是同一个思路
+- **Loop 模式**：AI 自我反思、迭代改进。这是 LLM 自一致性（Self-Consistency）的简化实现
+- **工具设计**：每个工具有明确的 name/description/parameters/execute，和 OpenAI Function Calling 的设计理念一致
+- **Prompt Engineering**：结构化输出、标签提取、XML 格式防注入
+- **记忆闭环**：跨会话的状态管理，通过 pendingQuestions 实现
 
 ### 4.3 行情模块（market.js）
 
@@ -508,21 +557,23 @@ describe('computePlanAdherence', () => {
 
 ### Q3：你的项目有什么亮点？
 
-> 三个亮点：
-> 1. **Prompt Engineering** — 设计了一套结构化的 AI 分析框架，包含 5 步分析法和标签提取机制，不是简单的"帮我分析一下"
-> 2. **记忆闭环** — AI 提取的追问会注入下一次复盘 prompt，形成连续对话，不是每次独立分析
-> 3. **统计引擎** — 纯函数设计的 stats.js，一次遍历计算 15+ 个指标，可测试、无副作用
+> 四个亮点：
+>
+> 1. **AI Agent 架构（Harness + Loop）** — 不是简单的"调一次 API 拿结果"，而是实现了完整的 Agent 引擎。AI 先调用工具获取数据（Harness），再生成分析，最后自我反思检查遗漏（Loop）。这和 ReAct、Reflection 等主流 Agent 模式是同一个思路
+> 2. **工具系统设计** — 5 个注册工具（get_review_history / get_pending_questions / get_market_data / get_trading_stats / get_tag_trend），每个工具有 name/description/parameters/execute，设计理念和 OpenAI Function Calling 一致
+> 3. **Prompt Engineering** — 结构化的 5 步分析框架 + 标签提取 + 工具调用格式，不是随便写个 prompt 就完事
+> 4. **统计引擎** — 纯函数设计的 stats.js，一次遍历计算 15+ 个指标，可测试、无副作用
 
 ### Q4：你遇到过什么技术难点？怎么解决的？
 
-> **难点 1：AI 回复的结构化解析。**
-> AI 回复是自由文本，我需要从中提取行为标签和追问问题。解决方案是在 System Prompt 中定义输出格式（`__TAGS__` 和 `### 必须回答的问题`），然后用正则提取。
+> **难点 1：AI Agent 的工具调用协议。**
+> AI 回复是自由文本，如何让 AI 按格式调用工具？解决方案是在 System Prompt 中定义 `__TOOL_CALL__:{"name":"...","params":{...}}` 格式，用正则解析。这和 OpenAI Function Calling 的思路一样，只是用 prompt 约束替代了 API 层的结构化输出。
 >
-> **难点 2：本地存储的数据管理。**
+> **难点 2：Agent 循环的终止条件。**
+> 工具调用和自我反思都需要循环，如何防止无限循环？解决方案是设置 MAX_TOOL_ROUNDS=3 和 MAX_REFLECTION_ROUNDS=1 的硬上限，同时在 prompt 中明确告诉 AI "最多调用 N 轮工具"。
+>
+> **难点 3：本地存储的数据管理。**
 > 所有数据存在 wx.setStorageSync，没有 SQL 查询能力。解决方案是封装 storage.js 作为 Repository 层，所有数据访问统一入口，stats.js 从内存中计算指标。
->
-> **难点 3：设计系统的一致性。**
-> 8 个页面 + 4 个组件需要统一视觉风格。解决方案是 CSS 变量驱动的设计系统，修改变量即全局生效，449 处变量引用确保一致性。
 
 ### Q5：如果让你重新做，你会怎么改进？
 
@@ -584,15 +635,16 @@ describe('computePlanAdherence', () => {
 
 ### 8.1 简历上怎么写
 
-```
-交易教练 — AI 驱动的股票交易复盘微信小程序
-技术栈：微信小程序原生框架 / DeepSeek API / 东方财富 API / CSS 变量设计系统
+```text
+交易教练 — AI Agent 驱动的股票交易复盘微信小程序
+技术栈：微信小程序原生框架 / DeepSeek API / Agent 引擎 / CSS 变量设计系统
 
-• 设计并实现了一套结构化的交易复盘系统，包含 8 个页面、4 个自定义组件、9 个工具模块
-• 通过 Prompt Engineering 设计了 AI 教练的 5 步分析框架，支持纵向对比和记忆闭环
+• 实现了 AI Agent 引擎（Harness + Loop 模式），AI 通过调用 5 个注册工具获取数据后生成分析，
+  并自我反思检查遗漏，设计理念与 ReAct / OpenAI Function Calling 一致
+• 设计了结构化的 Prompt Engineering 框架：5 步分析法 + 行为标签提取 + 工具调用协议
 • 实现了纯函数统计引擎，一次遍历计算 15+ 个交易指标
 • 建立了 CSS 变量驱动的设计系统，449 处变量引用确保视觉一致性，支持亮色/暗色主题
-• 采用人机协作开发模式，90% 代码由 AI 生成，我负责需求定义、架构决策和质量把关
+• 包含 8 个页面、4 个自定义组件、11 个工具模块，完整的产品从需求到上线
 ```
 
 ### 8.2 面试时怎么展示

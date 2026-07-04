@@ -2,6 +2,7 @@ const storage = require('../../utils/storage')
 const { callAI } = require('../../utils/api')
 const { getTodayDate } = require('../../utils/date')
 const { getMarketSnapshot } = require('../../utils/market')
+const { runAgent } = require('../../utils/agent')
 
 const SYSTEM_PROMPT = `你叫"严正"，是一位严肃的交易教练。你不讲正确的废话，只讲交易者真正需要面对的真相。
 
@@ -69,7 +70,10 @@ Page({
     error: false,
     errorMsg: '',
     conversationId: null,
-    messages: []
+    messages: [],
+    agentPhase: '',     // 当前 Agent 阶段：tools / analysis / reflection
+    agentProgress: '',  // 当前进度描述
+    toolCallsUsed: []   // 本次调用的工具列表
   },
 
   onLoad(options) {
@@ -168,31 +172,23 @@ Page({
   },
 
   async getCoachReply(reviewText, formData) {
-    const [historyCtx, marketData] = await Promise.all([
-      this.getHistoricalContext(formData),
-      getMarketSnapshot()
-    ])
-
-    const systemPrompt = SYSTEM_PROMPT
-
-    const historySection = historyCtx
-      ? `\n\n---\n【用户近5次复盘记录（供纵向对比）】\n${historyCtx}`
-      : ''
-
-    const marketSection = marketData
-      ? `\n\n---\n${marketData.text}`
-      : ''
-
-    const userMessage = reviewText + historySection + marketSection
+    // 组装用户消息（不含历史数据，历史数据由 Agent 通过工具获取）
+    const userMessage = reviewText
 
     try {
-      const rawReply = await callAI([
-        { role: 'system', content: systemPrompt },
-        { role: 'user', content: userMessage }
-      ], { temperature: 0.8 })
+      // 使用 Agent 引擎：Harness（工具调用）+ Loop（自我反思）
+      const agentResult = await runAgent({
+        systemPrompt: SYSTEM_PROMPT,
+        userMessage,
+        onProgress: ({ phase, message }) => {
+          this.setData({ agentPhase: phase, agentProgress: message })
+        }
+      })
 
+      const rawReply = agentResult.reply
       const tags = this.extractTags(rawReply)
       const cleanReply = rawReply.replace(/\n?__TAGS__\s*:.*$/, '')
+      const toolCallsUsed = agentResult.metadata.toolsUsed
 
       const newMessage = {
         role: 'ai',
@@ -207,7 +203,9 @@ Page({
         aiReply: cleanReply,
         loading: false,
         streaming: true,
-        messages: updatedMessages
+        messages: updatedMessages,
+        toolCallsUsed,
+        agentPhase: 'done'
       })
 
       // 打字机效果

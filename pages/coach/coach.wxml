@@ -17,13 +17,20 @@
           <text class="copy-btn" bindtap="copyReply">复制</text>
         </view>
       </view>
+
+      <!-- Agent 工具调用记录 -->
+      <view wx:if="{{toolCallsUsed.length > 0}}" class="agent-tools-bar">
+        <text class="tools-label">数据来源：</text>
+        <text wx:for="{{toolCallsUsed}}" wx:key="*this" class="tool-tag">{{item}}</text>
+      </view>
+
       <view class="ai-reply-body">
         <text class="ai-text" user-select="true">{{streaming ? displayReply : aiReply}}</text>
         <text wx:if="{{streaming}}" class="typing-cursor">|</text>
       </view>
     </view>
 
-    <!-- 加载态 -->
+    <!-- 加载态：显示 Agent 各阶段进度 -->
     <view wx:if="{{loading}}" class="loading-card">
       <view class="loading-avatar">
         <text class="avatar-emoji">🎯</text>
@@ -31,7 +38,26 @@
       </view>
       <view class="loading-content">
         <text class="loading-title">严正教练正在深度分析</text>
-        <text class="loading-desc">结合历史复盘与市场数据，请稍候...</text>
+
+        <!-- Agent 阶段进度 -->
+        <view class="agent-phases">
+          <view class="phase-item {{agentPhase === 'tools' ? 'active' : (agentPhase === 'analysis' || agentPhase === 'reflection' || agentPhase === 'done') ? 'done' : ''}}">
+            <text class="phase-icon">{{agentPhase === 'tools' ? '⏳' : (agentPhase === 'analysis' || agentPhase === 'reflection' || agentPhase === 'done') ? '✅' : '○'}}</text>
+            <text class="phase-text">收集数据</text>
+          </view>
+          <view class="phase-line"></view>
+          <view class="phase-item {{agentPhase === 'analysis' ? 'active' : (agentPhase === 'reflection' || agentPhase === 'done') ? 'done' : ''}}">
+            <text class="phase-icon">{{agentPhase === 'analysis' ? '⏳' : (agentPhase === 'reflection' || agentPhase === 'done') ? '✅' : '○'}}</text>
+            <text class="phase-text">生成分析</text>
+          </view>
+          <view class="phase-line"></view>
+          <view class="phase-item {{agentPhase === 'reflection' ? 'active' : agentPhase === 'done' ? 'done' : ''}}">
+            <text class="phase-icon">{{agentPhase === 'reflection' ? '⏳' : agentPhase === 'done' ? '✅' : '○'}}</text>
+            <text class="phase-text">自我检查</text>
+          </view>
+        </view>
+
+        <text class="loading-desc">{{agentProgress || '结合历史复盘与市场数据，请稍候...'}}</text>
         <view class="loading-bar">
           <view class="loading-bar-fill"></view>
         </view>
