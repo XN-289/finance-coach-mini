@@ -38,16 +38,23 @@ Page({
   },
 
   onEdit() {
-    wx.navigateBack()
-    setTimeout(() => {
-      const pages = getCurrentPages()
-      const prevPage = pages[pages.length - 1]
-      prevPage.setData({
-        editMode: true,
-        editId: this.data.review.id
-      })
-      prevPage.loadReviewForEdit(this.data.review.id)
-    }, 100)
+    const reviewId = this.data.review.id
+    wx.navigateBack({
+      success: () => {
+        setTimeout(() => {
+          try {
+            const pages = getCurrentPages()
+            const prevPage = pages[pages.length - 1]
+            if (prevPage && prevPage.loadReviewForEdit) {
+              prevPage.setData({ editMode: true, editId: reviewId })
+              prevPage.loadReviewForEdit(reviewId)
+            }
+          } catch (e) {
+            // 页面栈异常时静默处理
+          }
+        }, 150)
+      }
+    })
   },
 
   onDelete() {

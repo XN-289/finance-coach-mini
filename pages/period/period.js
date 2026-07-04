@@ -193,7 +193,7 @@ Page({
     return sorted
   },
 
-  formatDate(timestamp) {
+  formatPeriodDate(timestamp) {
     return formatDate(timestamp)
   },
 

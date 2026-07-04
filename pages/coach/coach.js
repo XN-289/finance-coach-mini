@@ -74,8 +74,13 @@ Page({
 
   onLoad(options) {
     const reviewXML = decodeURIComponent(options.review || '')
-    const formDataStr = options.formData
-    const formData = formDataStr ? JSON.parse(decodeURIComponent(formDataStr)) : null
+    let formData = null
+    try {
+      const formDataStr = options.formData
+      formData = formDataStr ? JSON.parse(decodeURIComponent(formDataStr)) : null
+    } catch (e) {
+      console.error('解析表单数据失败:', e)
+    }
     const displayText = this.formatDisplayText(formData)
 
     const conversation = {
@@ -366,10 +371,17 @@ Page({
       }
       index = Math.min(index + chunkSize, fullText.length)
       this.setData({ displayReply: fullText.substring(0, index) })
-      setTimeout(type, speed)
+      this._typewriterTimer = setTimeout(type, speed)
     }
 
     type()
+  },
+
+  onUnload() {
+    // 页面卸载时清理定时器，防止内存泄漏
+    if (this._typewriterTimer) {
+      clearTimeout(this._typewriterTimer)
+    }
   },
 
   retryRequest() {

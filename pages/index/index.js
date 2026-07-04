@@ -391,6 +391,18 @@ Page({
   onSubmit() {
     const { formData, editMode, editId } = this.data
 
+    // 表单验证：至少填写一项内容
+    const hasContent = formData.market || formData.theme
+      || formData.buyList.some(b => b.stock)
+      || formData.sellList.some(s => s.stock)
+      || formData.missedList.some(m => m.what)
+      || formData.selfAssessment || formData.tomorrow
+
+    if (!hasContent) {
+      wx.showToast({ title: '请至少填写一项内容', icon: 'none' })
+      return
+    }
+
     if (editMode && editId) {
       const existingReview = storage.getReviewById(editId)
       const updatedReview = {
@@ -595,6 +607,13 @@ Page({
     if (planText.includes('买入')) return '机会出现'
     if (planText.includes('卖出')) return '目标达成'
     return '条件满足'
+  },
+
+  onUnload() {
+    // 页面卸载时清理定时器
+    if (this._saveTimer) {
+      clearTimeout(this._saveTimer)
+    }
   },
 
   showPlanHelp() {

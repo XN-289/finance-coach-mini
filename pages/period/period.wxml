@@ -44,7 +44,7 @@
               <text class="type-label">{{item.type === 'week' ? '📊 周复盘' : '📈 月复盘'}}</text>
               <text class="date-range">{{item.startDate}} ~ {{item.endDate}}</text>
             </view>
-            <text class="analyze-time">生成于 {{formatDate(item.timestamp)}}</text>
+            <text class="analyze-time">生成于 {{formatPeriodDate(item.timestamp)}}</text>
           </view>
           <view wx:if="{{periodReviews.length === 0}}" class="empty-tip">暂无周期复盘记录</view>
         </view>
