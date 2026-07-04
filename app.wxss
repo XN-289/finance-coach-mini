@@ -1,25 +1,32 @@
-/* ===== 交易教练 — 全局设计系统 ===== */
+/* ===== 交易教练 — 全局设计系统 v2 ===== */
+/* 设计理念：淡雅暖色调，柔和红为主色，圆角卡片 + 微阴影 */
 
 /* CSS 变量（亮色主题默认） */
 page {
-  --bg: #f5f6f8;
+  --bg: #F8F5F2;
   --card-bg: #ffffff;
-  --text: #1a1a1a;
-  --text-secondary: #666666;
-  --text-muted: #999999;
-  --primary: #e4393c;
-  --primary-light: #fef0f0;
-  --primary-dark: #c1272d;
-  --border: #e8e8e8;
-  --divider: #f0f0f0;
-  --input-bg: #fafafa;
-  --shadow: rgba(0, 0, 0, 0.04);
-  --success: #52c41a;
-  --warning: #faad14;
-  --danger: #ff4d4f;
-  --info: #1890ff;
-  --up: #e4393c;
-  --down: #52c41a;
+  --text: #2D2A26;
+  --text-secondary: #8A8580;
+  --text-muted: #B5B0AB;
+  --primary: #D4574E;
+  --primary-light: #FDF2F1;
+  --primary-dark: #B8433B;
+  --primary-glow: rgba(212, 87, 78, 0.08);
+  --border: #EDE8E4;
+  --divider: #F3EFEC;
+  --input-bg: #FAFAF8;
+  --shadow: rgba(45, 42, 38, 0.05);
+  --shadow-md: rgba(45, 42, 38, 0.12);
+  --success: #5BA870;
+  --success-light: #F0F9F2;
+  --warning: #E8A84C;
+  --warning-light: #FFF8ED;
+  --danger: #D4574E;
+  --danger-light: #FDF2F1;
+  --info: #5B8FD4;
+  --info-light: #EFF5FC;
+  --up: #D4574E;
+  --down: #5BA870;
 
   background-color: var(--bg);
   height: 100%;
@@ -27,6 +34,7 @@ page {
   font-size: 28rpx;
   color: var(--text);
   line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
 }
 
 /* ===== 公共容器 ===== */
@@ -39,8 +47,8 @@ page {
 
 .content-area {
   flex: 1;
-  padding: 20rpx;
-  padding-bottom: 140rpx;
+  padding: 24rpx;
+  padding-bottom: 160rpx;
 }
 
 /* ===== 顶部导航栏 ===== */
@@ -48,33 +56,36 @@ page {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 20rpx 30rpx;
+  padding: 24rpx 28rpx;
   background-color: var(--primary);
 }
 
 .back-btn {
   font-size: 36rpx;
   color: #fff;
-  padding: 0 10rpx;
+  padding: 8rpx 12rpx;
+  border-radius: 8rpx;
+  background: rgba(255,255,255,0.15);
 }
 
 .nav-title {
-  font-size: 32rpx;
-  font-weight: 600;
+  font-size: 34rpx;
+  font-weight: 700;
   color: #fff;
+  letter-spacing: 1rpx;
 }
 
 .space {
-  width: 36rpx;
+  width: 60rpx;
 }
 
 /* ===== 区块通用样式 ===== */
 .section-title {
   font-size: 30rpx;
-  font-weight: 600;
+  font-weight: 700;
   color: var(--text);
   margin-bottom: 20rpx;
-  padding-left: 16rpx;
+  padding-left: 18rpx;
   border-left: 6rpx solid var(--primary);
 }
 
@@ -86,16 +97,16 @@ page {
 
 .review-section, .ai-section {
   background: var(--card-bg);
-  border-radius: 12rpx;
-  padding: 24rpx;
+  border-radius: 20rpx;
+  padding: 28rpx;
   margin-bottom: 20rpx;
-  box-shadow: 0 1rpx 4rpx var(--shadow);
+  box-shadow: 0 2rpx 12rpx var(--shadow);
 }
 
 .review-text, .ai-text {
   font-size: 26rpx;
   color: var(--text-secondary);
-  line-height: 1.8;
+  line-height: 1.9;
   white-space: pre-wrap;
   word-break: break-all;
 }
@@ -106,22 +117,23 @@ page {
   bottom: 0;
   left: 0;
   right: 0;
-  padding: 20rpx;
+  padding: 20rpx 24rpx;
   background-color: var(--card-bg);
   border-top: 1rpx solid var(--border);
-  /* 适配 tabBar 页面 */
   padding-bottom: calc(20rpx + env(safe-area-inset-bottom));
 }
 
 .submit-btn {
   width: 100%;
-  height: 88rpx;
-  line-height: 88rpx;
-  background-color: var(--primary);
+  height: 92rpx;
+  line-height: 92rpx;
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
   color: #fff;
   font-size: 32rpx;
-  font-weight: 600;
-  border-radius: 8rpx;
+  font-weight: 700;
+  border-radius: 14rpx;
+  letter-spacing: 2rpx;
+  box-shadow: 0 6rpx 20rpx rgba(212, 87, 78, 0.25);
 }
 
 .submit-btn::after {
@@ -129,24 +141,26 @@ page {
 }
 
 .submit-btn:active {
-  opacity: 0.85;
+  opacity: 0.9;
+  transform: scale(0.98);
 }
 
 /* ===== 标签 ===== */
 .draft-tag {
   display: inline-block;
-  padding: 4rpx 12rpx;
+  padding: 6rpx 16rpx;
   background-color: var(--primary);
   color: #fff;
   font-size: 20rpx;
-  border-radius: 4rpx;
+  font-weight: 600;
+  border-radius: 6rpx;
   margin-left: 16rpx;
 }
 
 /* ===== 空状态提示 ===== */
 .empty-tip {
   text-align: center;
-  padding: 40rpx;
+  padding: 60rpx 40rpx;
   color: var(--text-muted);
   font-size: 26rpx;
 }
@@ -154,22 +168,22 @@ page {
 /* ===== 加载动画 ===== */
 .loading {
   text-align: center;
-  padding: 80rpx;
+  padding: 100rpx 40rpx;
   color: var(--text-muted);
   font-size: 28rpx;
   background: var(--card-bg);
-  border-radius: 12rpx;
+  border-radius: 20rpx;
   margin: 20rpx;
 }
 
 .loading-spinner {
-  width: 48rpx;
-  height: 48rpx;
-  border: 4rpx solid #f0f0f0;
+  width: 56rpx;
+  height: 56rpx;
+  border: 4rpx solid var(--divider);
   border-top: 4rpx solid var(--primary);
   border-radius: 50%;
-  animation: spin 1s linear infinite;
-  margin: 0 auto;
+  animation: spin 0.8s linear infinite;
+  margin: 0 auto 24rpx;
 }
 
 @keyframes spin {
@@ -180,32 +194,34 @@ page {
 /* ===== 错误状态 ===== */
 .error-section {
   background: var(--card-bg);
-  border-radius: 12rpx;
-  padding: 40rpx;
+  border-radius: 20rpx;
+  padding: 60rpx 40rpx;
   text-align: center;
   margin-bottom: 20rpx;
 }
 
 .error-icon {
-  font-size: 60rpx;
-  margin-bottom: 20rpx;
+  font-size: 64rpx;
+  margin-bottom: 24rpx;
   display: block;
 }
 
 .error-text {
   font-size: 28rpx;
   color: var(--primary);
-  margin-bottom: 30rpx;
+  margin-bottom: 32rpx;
   display: block;
 }
 
 .retry-btn {
-  background: var(--primary);
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
   color: #fff;
   border: none;
-  border-radius: 8rpx;
-  padding: 20rpx 40rpx;
+  border-radius: 12rpx;
+  padding: 20rpx 48rpx;
   font-size: 28rpx;
+  font-weight: 600;
+  box-shadow: 0 4rpx 16rpx rgba(212, 87, 78, 0.2);
 }
 
 .retry-btn::after {
@@ -216,14 +232,16 @@ page {
 .copy-btn {
   font-size: 24rpx;
   color: var(--primary);
-  padding: 8rpx 16rpx;
+  padding: 8rpx 20rpx;
   background: var(--primary-light);
   border-radius: 8rpx;
+  font-weight: 500;
 }
 
 .action-btn {
   font-size: 24rpx;
   color: var(--primary);
+  font-weight: 500;
 }
 
 .action-btn.delete {
@@ -233,25 +251,25 @@ page {
 /* ===== 通用卡片 ===== */
 .card {
   background: var(--card-bg);
-  border-radius: 12rpx;
-  padding: 24rpx;
+  border-radius: 20rpx;
+  padding: 28rpx;
   margin-bottom: 20rpx;
-  box-shadow: 0 1rpx 4rpx var(--shadow);
+  box-shadow: 0 2rpx 12rpx var(--shadow);
 }
 
 /* ===== 通用 Badge ===== */
 .badge {
   display: inline-block;
-  padding: 4rpx 12rpx;
-  border-radius: 16rpx;
+  padding: 6rpx 16rpx;
+  border-radius: 8rpx;
   font-size: 20rpx;
   font-weight: 600;
 }
 
-.badge.success { background: #f0fff0; color: var(--success); }
-.badge.warning { background: #fffbe6; color: var(--warning); }
-.badge.danger { background: #fff2f0; color: var(--danger); }
-.badge.info { background: #e6f7ff; color: var(--info); }
+.badge.success { background: var(--success-light); color: var(--success); }
+.badge.warning { background: var(--warning-light); color: var(--warning); }
+.badge.danger { background: var(--danger-light); color: var(--danger); }
+.badge.info { background: var(--info-light); color: var(--info); }
 
 /* ===== 通用按钮样式 ===== */
 .btn {
@@ -259,21 +277,27 @@ page {
   align-items: center;
   justify-content: center;
   padding: 16rpx 32rpx;
-  border-radius: 8rpx;
+  border-radius: 12rpx;
   font-size: 28rpx;
   font-weight: 600;
   border: none;
+  transition: all 0.2s ease;
 }
 
 .btn::after { border: none; }
 
-.btn.primary { background: var(--primary); color: #fff; }
-.btn.primary:active { opacity: 0.85; }
+.btn.primary {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+  color: #fff;
+  box-shadow: 0 4rpx 16rpx rgba(212, 87, 78, 0.2);
+}
+
+.btn.primary:active { opacity: 0.9; transform: scale(0.98); }
 
 .btn.outline {
   background: transparent;
   color: var(--primary);
-  border: 1rpx solid var(--primary);
+  border: 2rpx solid var(--primary);
 }
 
 .btn.ghost {
@@ -282,21 +306,27 @@ page {
 }
 
 .btn.small {
-  padding: 8rpx 20rpx;
+  padding: 10rpx 24rpx;
   font-size: 24rpx;
 }
 
 /* ===== 通用输入框 ===== */
 .input {
   width: 100%;
-  height: 80rpx;
-  padding: 0 20rpx;
+  height: 84rpx;
+  padding: 0 24rpx;
   background-color: var(--input-bg);
-  border: 1rpx solid var(--border);
-  border-radius: 8rpx;
+  border: 2rpx solid var(--border);
+  border-radius: 12rpx;
   font-size: 28rpx;
   color: var(--text);
   box-sizing: border-box;
+  transition: border-color 0.2s ease;
+}
+
+.input:focus {
+  border-color: var(--primary);
+  background: var(--card-bg);
 }
 
 .textarea {
@@ -304,11 +334,17 @@ page {
   min-height: 180rpx;
   padding: 24rpx;
   background-color: var(--input-bg);
-  border: 1rpx solid var(--border);
-  border-radius: 8rpx;
+  border: 2rpx solid var(--border);
+  border-radius: 12rpx;
   font-size: 28rpx;
   color: var(--text);
   box-sizing: border-box;
+  transition: border-color 0.2s ease;
+}
+
+.textarea:focus {
+  border-color: var(--primary);
+  background: var(--card-bg);
 }
 
 /* ===== 股票涨跌颜色 ===== */
@@ -323,7 +359,7 @@ page {
 
 /* ===== 渐变背景 ===== */
 .gradient-primary {
-  background: linear-gradient(135deg, #e4393c 0%, #c1272d 100%);
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
 }
 
 /* ===== 动画 ===== */
@@ -337,14 +373,58 @@ page {
   to { transform: translateX(0); }
 }
 
+@keyframes slideInUp {
+  from { opacity: 0; transform: translateY(40rpx); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
 @keyframes pulse {
   0%, 100% { opacity: 1; }
   50% { opacity: 0.5; }
 }
 
-.animate-fadeIn { animation: fadeIn 0.3s ease; }
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.animate-fadeIn { animation: fadeIn 0.35s ease; }
+.animate-slideInUp { animation: slideInUp 0.4s ease; }
 .animate-pulse { animation: pulse 2s infinite; }
 
-/* ===== 深色模式适配（通过 class 切换） ===== */
-/* 注意：WeChat 小程序不支持 CSS @media (prefers-color-scheme)
-   深色模式通过页面根元素 class 控制 */
+/* ===== 骨架屏 ===== */
+.skeleton {
+  background: linear-gradient(90deg, var(--divider) 25%, var(--bg) 50%, var(--divider) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 8rpx;
+}
+
+/* ===== 深色模式 ===== */
+/* 通过 page.dark-mode class 切换 */
+page.dark-mode {
+  --bg: #1A1816;
+  --card-bg: #242220;
+  --text: #E8E4E0;
+  --text-secondary: #A09A94;
+  --text-muted: #6B6560;
+  --primary: #E87068;
+  --primary-light: #2A2020;
+  --primary-dark: #F09088;
+  --primary-glow: rgba(232, 112, 104, 0.12);
+  --border: #3A3632;
+  --divider: #2E2A28;
+  --input-bg: #2A2624;
+  --shadow: rgba(0, 0, 0, 0.2);
+  --shadow-md: rgba(0, 0, 0, 0.4);
+  --success: #6DC882;
+  --success-light: #1E2A20;
+  --warning: #F0B860;
+  --warning-light: #2A2418;
+  --danger: #E87068;
+  --danger-light: #2A2020;
+  --info: #70A8E8;
+  --info-light: #1A2230;
+  --up: #E87068;
+  --down: #6DC882;
+}

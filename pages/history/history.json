@@ -1,4 +1,5 @@
 {
   "navigationBarTitleText": "复盘详情",
-  "usingComponents": {}
+  "navigationBarBackgroundColor": "#D4574E",
+  "navigationBarTextStyle": "white"
 }

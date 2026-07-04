@@ -1,55 +1,61 @@
-/* 周期复盘页面特有样式 */
+/* ===== 周期复盘 v2 — 淡雅暖色设计 ===== */
+
 .content-area {
-  padding-bottom: 100rpx;
+  padding-bottom: 120rpx;
 }
 
 .entry-section {
-  background: #fff;
-  border-radius: 12rpx;
-  padding: 24rpx;
+  background: var(--card-bg);
+  border-radius: 20rpx;
+  padding: 28rpx;
   margin-bottom: 20rpx;
+  box-shadow: 0 2rpx 12rpx rgba(45, 42, 38, 0.05);
 }
 
 .button-group {
   display: flex;
   flex-direction: column;
-  gap: 16rpx;
+  gap: 18rpx;
 }
 
 .period-btn {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  padding: 32rpx;
-  background-color: #fafafa;
-  border-radius: 12rpx;
+  padding: 36rpx;
+  background: var(--input-bg);
+  border-radius: 16rpx;
   border: none;
+  transition: all 0.2s ease;
 }
 
 .period-btn:active {
-  background-color: #fef0f0;
+  background: var(--primary-light);
+  transform: scale(0.98);
 }
 
 .btn-icon {
-  font-size: 48rpx;
-  margin-bottom: 16rpx;
+  font-size: 52rpx;
+  margin-bottom: 18rpx;
 }
 
 .period-btn text {
   font-size: 28rpx;
-  color: #333;
-  margin-bottom: 8rpx;
+  color: var(--text);
+  margin-bottom: 10rpx;
+  font-weight: 600;
 }
 
 .btn-desc {
   font-size: 24rpx;
-  color: #999;
+  color: var(--text-muted);
 }
 
 .history-section {
-  background: #fff;
-  border-radius: 12rpx;
-  padding: 24rpx;
+  background: var(--card-bg);
+  border-radius: 20rpx;
+  padding: 28rpx;
+  box-shadow: 0 2rpx 12rpx rgba(45, 42, 38, 0.05);
 }
 
 .period-list {
@@ -59,26 +65,33 @@
 }
 
 .period-item {
-  padding: 24rpx;
-  background-color: #fafafa;
-  border-radius: 8rpx;
+  padding: 26rpx;
+  background: var(--input-bg);
+  border-radius: 14rpx;
+  transition: all 0.2s ease;
+}
+
+.period-item:active {
+  background: var(--primary-light);
 }
 
 .period-type {
   font-size: 32rpx;
-  font-weight: 600;
-  color: #e4393c;
+  font-weight: 700;
+  color: var(--primary);
 }
 
 .date-range {
   font-size: 26rpx;
-  color: #666;
+  color: var(--text-secondary);
+  margin-top: 6rpx;
 }
 
 .analyze-time {
   display: block;
-  font-size: 24rpx;
-  color: #999;
+  font-size: 22rpx;
+  color: var(--text-muted);
+  margin-top: 8rpx;
 }
 
 /* 周期复盘详情 */
@@ -86,68 +99,74 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding-bottom: 20rpx;
-  border-bottom: 1rpx solid #e8e8e8;
-  margin-bottom: 24rpx;
+  padding-bottom: 22rpx;
+  border-bottom: 2rpx solid var(--divider);
+  margin-bottom: 28rpx;
 }
 
 .included-reviews {
-  margin-bottom: 32rpx;
+  margin-bottom: 36rpx;
 }
 
 .section-label {
   font-size: 28rpx;
-  color: #666;
-  margin-bottom: 16rpx;
-  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 18rpx;
+  font-weight: 700;
 }
 
 .review-list {
   display: flex;
   flex-direction: column;
-  gap: 12rpx;
+  gap: 14rpx;
 }
 
 .review-item {
-  padding: 16rpx 20rpx;
-  background-color: #fafafa;
-  border-radius: 8rpx;
+  padding: 18rpx 24rpx;
+  background: var(--input-bg);
+  border-radius: 12rpx;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  transition: all 0.2s ease;
+}
+
+.review-item:active {
+  background: var(--primary-light);
 }
 
 .review-date {
   font-size: 26rpx;
   font-weight: 600;
-  color: #333;
+  color: var(--text);
 }
 
 .review-summary {
   font-size: 24rpx;
-  color: #666;
+  color: var(--text-secondary);
   max-width: 60%;
   text-align: right;
 }
 
 /* 行为标签分布 */
 .tags-section {
-  background: #fff;
-  border-radius: 12rpx;
-  padding: 24rpx;
+  background: var(--card-bg);
+  border-radius: 20rpx;
+  padding: 28rpx;
   margin-bottom: 24rpx;
+  box-shadow: 0 2rpx 12rpx rgba(45, 42, 38, 0.05);
 }
 
 .tag-list {
-  margin-top: 16rpx;
+  margin-top: 18rpx;
 }
 
 .tag-row {
   display: flex;
   align-items: center;
-  gap: 12rpx;
-  padding: 12rpx 0;
-  border-bottom: 1rpx solid #f5f5f5;
+  gap: 14rpx;
+  padding: 14rpx 0;
+  border-bottom: 1rpx solid var(--divider);
 }
 
 .tag-row:last-child {
@@ -156,49 +175,52 @@
 
 .tag-name {
   font-size: 26rpx;
-  font-weight: 600;
-  color: #e4393c;
+  font-weight: 700;
+  color: var(--primary);
   min-width: 120rpx;
 }
 
 .tag-count {
   font-size: 24rpx;
-  color: #999;
+  color: var(--text-muted);
   min-width: 60rpx;
+  font-weight: 500;
 }
 
 .tag-bar {
   flex: 1;
-  height: 12rpx;
-  background: #f5f5f5;
-  border-radius: 6rpx;
+  height: 14rpx;
+  background: var(--divider);
+  border-radius: 7rpx;
   overflow: hidden;
 }
 
 .tag-bar-fill {
   height: 100%;
-  background: #e4393c;
-  border-radius: 6rpx;
+  background: linear-gradient(90deg, var(--primary), var(--primary-dark));
+  border-radius: 7rpx;
+  transition: width 0.3s ease;
 }
 
 /* 计划执行力趋势 */
 .trend-section {
-  background: #fff;
-  border-radius: 12rpx;
-  padding: 24rpx;
+  background: var(--card-bg);
+  border-radius: 20rpx;
+  padding: 28rpx;
   margin-bottom: 24rpx;
+  box-shadow: 0 2rpx 12rpx rgba(45, 42, 38, 0.05);
 }
 
 .trend-list {
-  margin-top: 16rpx;
+  margin-top: 18rpx;
 }
 
 .trend-row {
   display: flex;
   align-items: center;
-  gap: 12rpx;
-  padding: 10rpx 0;
-  border-bottom: 1rpx solid #f5f5f5;
+  gap: 14rpx;
+  padding: 12rpx 0;
+  border-bottom: 1rpx solid var(--divider);
 }
 
 .trend-row:last-child {
@@ -211,65 +233,95 @@
 
 .trend-date {
   font-size: 24rpx;
-  color: #666;
-  min-width: 90rpx;
+  color: var(--text-secondary);
+  min-width: 100rpx;
+  font-weight: 500;
 }
 
 .trend-none {
   font-size: 24rpx;
-  color: #ccc;
+  color: var(--text-muted);
 }
 
 .trend-data {
   flex: 1;
   display: flex;
   align-items: center;
-  gap: 8rpx;
+  gap: 10rpx;
 }
 
 .trend-warn {
   font-size: 22rpx;
-  min-width: 32rpx;
+  min-width: 36rpx;
 }
 
 .trend-spacer {
-  min-width: 32rpx;
+  min-width: 36rpx;
 }
 
 .trend-bar-container {
   flex: 1;
-  height: 16rpx;
-  background: #f5f5f5;
-  border-radius: 8rpx;
+  height: 18rpx;
+  background: var(--divider);
+  border-radius: 9rpx;
   overflow: hidden;
 }
 
 .trend-bar-fill {
   height: 100%;
-  background: #e4393c;
-  border-radius: 8rpx;
+  background: linear-gradient(90deg, var(--primary), var(--primary-dark));
+  border-radius: 9rpx;
   min-width: 4rpx;
+  transition: width 0.3s ease;
 }
 
 .trend-pct {
   font-size: 22rpx;
-  color: #666;
-  min-width: 130rpx;
+  color: var(--text-secondary);
+  min-width: 140rpx;
   text-align: right;
+  font-weight: 500;
 }
 
 .trend-summary {
   display: flex;
   justify-content: space-between;
-  padding-top: 16rpx;
-  margin-top: 16rpx;
-  border-top: 1rpx solid #e8e8e8;
+  padding-top: 18rpx;
+  margin-top: 18rpx;
+  border-top: 2rpx solid var(--divider);
   font-size: 24rpx;
-  color: #999;
+  color: var(--text-muted);
+  font-weight: 500;
 }
 
 .analysis-section {
-  background: #fff;
-  border-radius: 12rpx;
-  padding: 24rpx;
+  background: var(--card-bg);
+  border-radius: 20rpx;
+  padding: 28rpx;
+  box-shadow: 0 2rpx 12rpx rgba(45, 42, 38, 0.05);
+}
+
+/* 加载提示 */
+.loading-hint {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16rpx;
+  padding: 32rpx;
+  color: var(--text-muted);
+  font-size: 26rpx;
+}
+
+.loading-spinner {
+  width: 40rpx;
+  height: 40rpx;
+  border: 3rpx solid var(--divider);
+  border-top: 3rpx solid var(--primary);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }

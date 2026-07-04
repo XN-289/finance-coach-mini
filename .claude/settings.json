@@ -4,7 +4,10 @@
       "Bash(node -e ' *)",
       "Bash(git remote *)",
       "Bash(git branch *)",
-      "Bash(git add *)"
+      "Bash(git add *)",
+      "Bash(git commit -m 'feat: 全面升级为简历级项目 *)",
+      "Bash(git push *)",
+      "Bash(git commit --amend -m 'feat: 新增数据仪表盘、自选股管理、主题系统与工程化能力 *)"
     ]
   }
 }

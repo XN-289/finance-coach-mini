@@ -1,4 +1,5 @@
-/* 个人中心样式 */
+/* ===== 个人中心 v2 — 淡雅暖色设计 ===== */
+
 .profile-scroll {
   height: 100vh;
 }
@@ -7,50 +8,55 @@
 .user-card {
   display: flex;
   align-items: center;
-  padding: 40rpx 30rpx;
-  background: linear-gradient(135deg, #e4393c 0%, #c1272d 100%);
-  margin: 20rpx;
-  border-radius: 16rpx;
+  padding: 44rpx 32rpx;
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+  margin: 24rpx;
+  border-radius: 20rpx;
   color: #fff;
+  box-shadow: 0 8rpx 28rpx rgba(212, 87, 78, 0.3);
 }
 
 .avatar {
-  width: 100rpx;
-  height: 100rpx;
-  border-radius: 50rpx;
+  width: 108rpx;
+  height: 108rpx;
+  border-radius: 54rpx;
   background: rgba(255,255,255,0.2);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 48rpx;
-  margin-right: 24rpx;
+  font-size: 52rpx;
+  margin-right: 28rpx;
+  backdrop-filter: blur(10px);
+  border: 2rpx solid rgba(255,255,255,0.3);
 }
 
 .user-info {
   display: flex;
   flex-direction: column;
-  gap: 8rpx;
+  gap: 10rpx;
 }
 
 .user-name {
-  font-size: 36rpx;
+  font-size: 38rpx;
   font-weight: 700;
+  letter-spacing: 1rpx;
 }
 
 .user-motto {
   font-size: 24rpx;
-  opacity: 0.8;
+  opacity: 0.85;
+  letter-spacing: 0.5rpx;
 }
 
 /* 快捷统计 */
 .quick-stats {
   display: flex;
   align-items: center;
-  background: #fff;
-  margin: 0 20rpx 20rpx;
-  padding: 30rpx;
-  border-radius: 12rpx;
-  box-shadow: 0 1rpx 4rpx rgba(0,0,0,0.04);
+  background: var(--card-bg);
+  margin: 0 24rpx 20rpx;
+  padding: 32rpx;
+  border-radius: 20rpx;
+  box-shadow: 0 2rpx 12rpx rgba(45, 42, 38, 0.05);
 }
 
 .qs-item {
@@ -61,43 +67,49 @@
 }
 
 .qs-value {
-  font-size: 40rpx;
+  font-size: 44rpx;
   font-weight: 700;
-  color: #e4393c;
+  color: var(--primary);
+  line-height: 1.2;
 }
 
 .qs-label {
   font-size: 22rpx;
-  color: #999;
-  margin-top: 6rpx;
+  color: var(--text-muted);
+  margin-top: 8rpx;
+  font-weight: 500;
 }
 
 .qs-divider {
   width: 1rpx;
-  height: 50rpx;
-  background: #f0f0f0;
+  height: 56rpx;
+  background: var(--divider);
 }
 
 /* 菜单 */
 .menu-section {
-  background: #fff;
-  margin: 0 20rpx 20rpx;
-  border-radius: 12rpx;
+  background: var(--card-bg);
+  margin: 0 24rpx 20rpx;
+  border-radius: 20rpx;
   overflow: hidden;
-  box-shadow: 0 1rpx 4rpx rgba(0,0,0,0.04);
+  box-shadow: 0 2rpx 12rpx rgba(45, 42, 38, 0.05);
 }
 
 .menu-title {
-  font-size: 24rpx;
-  color: #999;
-  padding: 20rpx 24rpx 8rpx;
+  font-size: 22rpx;
+  color: var(--text-muted);
+  padding: 24rpx 28rpx 10rpx;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 2rpx;
 }
 
 .menu-item {
   display: flex;
   align-items: center;
-  padding: 28rpx 24rpx;
-  border-bottom: 1rpx solid #f5f5f5;
+  padding: 30rpx 28rpx;
+  border-bottom: 1rpx solid var(--divider);
+  transition: background 0.15s ease;
 }
 
 .menu-item:last-child {
@@ -105,76 +117,84 @@
 }
 
 .menu-item:active {
-  background: #fafafa;
+  background: var(--primary-light);
 }
 
 .menu-icon {
-  font-size: 36rpx;
-  margin-right: 20rpx;
+  font-size: 38rpx;
+  margin-right: 22rpx;
+  width: 48rpx;
+  text-align: center;
 }
 
 .menu-text {
   flex: 1;
   font-size: 28rpx;
-  color: #1a1a1a;
+  color: var(--text);
+  font-weight: 500;
 }
 
 .menu-desc {
   font-size: 24rpx;
-  color: #999;
-  margin-right: 12rpx;
+  color: var(--text-muted);
+  margin-right: 14rpx;
 }
 
 .menu-switch {
-  font-size: 24rpx;
-  color: #999;
-  padding: 6rpx 16rpx;
-  background: #f5f5f5;
+  font-size: 22rpx;
+  color: var(--text-muted);
+  padding: 8rpx 20rpx;
+  background: var(--input-bg);
   border-radius: 16rpx;
+  font-weight: 500;
+  transition: all 0.2s ease;
 }
 
 .menu-switch.on {
   color: #fff;
-  background: #e4393c;
+  background: var(--primary);
 }
 
 .menu-arrow {
   font-size: 32rpx;
-  color: #ccc;
+  color: var(--text-muted);
+  opacity: 0.5;
 }
 
 /* 存储用量 */
 .storage-section {
-  background: #fff;
-  margin: 0 20rpx 20rpx;
-  padding: 24rpx;
-  border-radius: 12rpx;
-  box-shadow: 0 1rpx 4rpx rgba(0,0,0,0.04);
+  background: var(--card-bg);
+  margin: 0 24rpx 20rpx;
+  padding: 28rpx;
+  border-radius: 20rpx;
+  box-shadow: 0 2rpx 12rpx rgba(45, 42, 38, 0.05);
 }
 
 .storage-title {
   font-size: 28rpx;
-  font-weight: 600;
-  color: #1a1a1a;
-  margin-bottom: 16rpx;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 20rpx;
 }
 
 /* 危险操作 */
 .danger-section {
-  padding: 20rpx;
+  padding: 24rpx;
 }
 
 .danger-btn {
   text-align: center;
-  padding: 24rpx;
-  color: #999;
+  padding: 26rpx;
+  color: var(--text-muted);
   font-size: 26rpx;
-  border: 1rpx solid #e8e8e8;
-  border-radius: 12rpx;
+  border: 2rpx solid var(--border);
+  border-radius: 14rpx;
+  transition: all 0.2s ease;
+  font-weight: 500;
 }
 
 .danger-btn:active {
-  color: #e4393c;
-  border-color: #e4393c;
-  background: #fef0f0;
+  color: var(--danger);
+  border-color: var(--danger);
+  background: var(--danger-light);
 }

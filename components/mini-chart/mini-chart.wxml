@@ -6,7 +6,7 @@
       <view class="bar-row" wx:for="{{chartData}}" wx:key="label">
         <text class="bar-label">{{item.label}}</text>
         <view class="bar-track">
-          <view class="bar-fill" style="width: {{item.percent}}%; background: {{item.color || '#e4393c'}}"></view>
+          <view class="bar-fill" style="width: {{item.percent}}%; background: {{item.color || '#D4574E'}}"></view>
         </view>
         <text class="bar-value">{{item.value}}</text>
       </view>
@@ -19,7 +19,7 @@
           wx:for="{{chartData}}"
           wx:key="label"
           class="trend-bar"
-          style="height: {{item.height}}%; background: {{item.color || '#e4393c'}}"
+          style="height: {{item.height}}%; background: {{item.color || '#D4574E'}}"
         >
           <view class="trend-tooltip">{{item.value}}</view>
         </view>
@@ -33,7 +33,7 @@
     <view wx:if="{{type === 'ring'}}" class="ring-chart">
       <view class="ring-outer">
         <view class="ring-bg"></view>
-        <view class="ring-fill" style="background: conic-gradient({{ringColor}} {{ringPercent}}%, #f0f0f0 {{ringPercent}}%)"></view>
+        <view class="ring-fill" style="background: conic-gradient({{ringColor}} {{ringPercent}}%, #F3EFEC {{ringPercent}}%)"></view>
         <view class="ring-inner">
           <text class="ring-value">{{value}}</text>
           <text class="ring-label" wx:if="{{subtitle}}">{{subtitle}}</text>

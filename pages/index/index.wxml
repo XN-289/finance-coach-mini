@@ -1,7 +1,7 @@
 <view class="container">
   <!-- 草稿提示条 -->
   <view wx:if="{{hasDraft}}" class="draft-bar">
-    <text>发现未完成的草稿</text>
+    <text>📝 发现未完成的草稿</text>
     <view class="draft-actions">
       <text class="draft-action" bindtap="restoreDraft">恢复</text>
       <text class="draft-action" bindtap="clearDraft">清除</text>
@@ -11,7 +11,7 @@
   <!-- 昨日计划追踪卡片 -->
   <view wx:if="{{yesterdayPlans.length > 0}}" class="plan-recall-card">
     <view class="plan-recall-header">
-      <text class="plan-recall-title">昨日计划追踪（{{yesterdayPlanDate}} 复盘）</text>
+      <text class="plan-recall-title">📋 昨日计划追踪（{{yesterdayPlanDate}} 复盘）</text>
     </view>
     <view
       wx:for="{{yesterdayPlans}}"
@@ -24,12 +24,12 @@
           class="plan-recall-btn triggered"
           data-id="{{item.id}}"
           bindtap="handlePlanTriggered"
-        >已触发</text>
+        >✓ 已触发</text>
         <text
           class="plan-recall-btn missed"
           data-id="{{item.id}}"
           bindtap="handlePlanMissed"
-        >未触发</text>
+        >✕ 未触发</text>
       </view>
     </view>
   </view>
@@ -40,7 +40,7 @@
   <!-- 侧边栏 -->
   <view class="drawer {{showDrawer ? 'open' : ''}}">
     <view class="drawer-header">
-      <text class="drawer-title">历史复盘</text>
+      <text class="drawer-title">📚 历史复盘</text>
       <text class="close-btn" bindtap="toggleDrawer">×</text>
     </view>
 
@@ -59,7 +59,7 @@
             bindtap="viewPeriodReview"
             data-id="{{item.id}}"
           >
-            <text class="period-label">{{item.type === 'week' ? '周复盘' : '月复盘'}}</text>
+            <text class="period-label">{{item.type === 'week' ? '📊 周复盘' : '📈 月复盘'}}</text>
             <text class="period-date">{{item.startDate}} ~ {{item.endDate}}</text>
           </view>
           <view wx:if="{{periodReviews.length === 0}}" class="empty-tip">暂无周期复盘</view>
@@ -117,10 +117,31 @@
 
   <!-- 表单区域 -->
   <scroll-view class="form-area" scroll-y>
+    <!-- 新用户欢迎卡片 -->
+    <view wx:if="{{reviews.length === 0 && !hasDraft}}" class="welcome-card">
+      <view class="welcome-icon">🎯</view>
+      <view class="welcome-title">欢迎使用交易教练</view>
+      <view class="welcome-desc">每日复盘是提升交易能力的最佳习惯。记录今天的操作，让 AI 教练"严正"帮你分析行为模式。</view>
+      <view class="welcome-steps">
+        <view class="welcome-step">
+          <text class="step-num">1</text>
+          <text class="step-text">记录今日交易</text>
+        </view>
+        <view class="welcome-step">
+          <text class="step-num">2</text>
+          <text class="step-text">AI 深度分析</text>
+        </view>
+        <view class="welcome-step">
+          <text class="step-num">3</text>
+          <text class="step-text">追踪改进行动</text>
+        </view>
+      </view>
+    </view>
+
     <!-- 市场数据卡片（自动获取） -->
     <view wx:if="{{marketSummary}}" class="market-snapshot">
       <view class="snapshot-header">
-        <text class="snapshot-title">今日市场</text>
+        <text class="snapshot-title">📊 今日市场</text>
         <text class="snapshot-source">数据自动更新</text>
       </view>
       <text class="snapshot-text">{{marketSummary}}</text>
@@ -130,7 +151,7 @@
     <view class="form-section">
       <view class="section-header">
         <view class="section-title">
-          <text>市场分析</text>
+          <text>🏛️ 市场分析</text>
         </view>
         <text class="section-subtitle">洞察市场，把握方向</text>
       </view>
@@ -172,8 +193,7 @@
     <view class="form-section actions-section">
       <view class="section-header">
         <view class="section-title">
-          <text class="title-icon">⚖️</text>
-          <text>知行合一</text>
+          <text>⚖️ 知行合一</text>
         </view>
         <text class="section-subtitle">计划与执行的差距</text>
       </view>
@@ -181,7 +201,7 @@
       <!-- 买入记录 -->
       <view class="action-category">
         <view class="category-header buy-header">
-          <text class="category-title">买入记录</text>
+          <text class="category-title">🟢 买入记录</text>
           <text class="category-hint">计划内的决策</text>
         </view>
 
@@ -227,7 +247,7 @@
                     bindchange="onSwitch"
                     data-field="buyList.matchPlan"
                     data-index="{{index}}"
-                    color="#e4393c"
+                    color="#D4574E"
                   />
                   <text class="switch-text">{{item.matchPlan ? '是' : '否'}}</text>
                 </view>
@@ -245,7 +265,7 @@
       <!-- 卖出记录 -->
       <view class="action-category">
         <view class="category-header sell-header">
-          <text class="category-title">卖出记录</text>
+          <text class="category-title">🔴 卖出记录</text>
           <text class="category-hint">计划内的决策</text>
         </view>
 
@@ -291,7 +311,7 @@
                     bindchange="onSwitch"
                     data-field="sellList.matchPlan"
                     data-index="{{index}}"
-                    color="#e4393c"
+                    color="#D4574E"
                   />
                   <text class="switch-text">{{item.matchPlan ? '是' : '否'}}</text>
                 </view>
@@ -309,7 +329,7 @@
       <!-- 未执行计划 -->
       <view class="action-category">
         <view class="category-header missed-header">
-          <text class="category-title">未执行计划</text>
+          <text class="category-title">❌ 未执行计划</text>
           <text class="category-hint">知与行的差距</text>
         </view>
 
@@ -363,7 +383,7 @@
     <view class="form-section">
       <view class="section-header">
         <view class="section-title">
-          <text>自我评价</text>
+          <text>💭 自我评价</text>
         </view>
         <text class="section-subtitle">诚实地面对自己</text>
       </view>
@@ -385,8 +405,7 @@
     <view class="form-section plan-section">
       <view class="section-header">
         <view class="section-title">
-          <text class="title-icon">🎯</text>
-          <text>明日If-Then计划</text>
+          <text>🎯 明日If-Then计划</text>
         </view>
         <view class="action-buttons">
           <text class="action-btn help-btn" bindtap="showPlanHelp">?</text>
@@ -409,7 +428,7 @@
         />
         <view class="char-count">{{formData.tomorrow.length}}/500</view>
         <view class="plan-example">
-          <text class="example-label">示例：</text>
+          <text class="example-label">💡 示例：</text>
           <text class="example-text">如果股价放量突破前高，就买入2000股</text>
         </view>
       </view>
@@ -423,6 +442,6 @@
   </view>
 
   <view class="footer">
-    <button class="submit-btn" bindtap="onSubmit">{{editMode ? '保存修改' : '提交复盘'}}</button>
+    <button class="submit-btn" bindtap="onSubmit">{{editMode ? '💾 保存修改' : '🚀 提交复盘'}}</button>
   </view>
 </view>

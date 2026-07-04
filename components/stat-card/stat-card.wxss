@@ -1,37 +1,46 @@
+/* ===== 统计卡片组件 v2 ===== */
+
 .stat-card {
   display: flex;
   align-items: center;
-  padding: 24rpx;
+  padding: 28rpx;
   background: var(--card-bg, #fff);
-  border-radius: 12rpx;
-  box-shadow: 0 1rpx 4rpx rgba(0,0,0,0.04);
+  border-radius: 16rpx;
+  box-shadow: 0 2rpx 12rpx rgba(45, 42, 38, 0.05);
   position: relative;
+  transition: all 0.2s ease;
+}
+
+.stat-card:active {
+  transform: scale(0.98);
+  box-shadow: 0 1rpx 6rpx rgba(45, 42, 38, 0.03);
 }
 
 .stat-card.mini {
-  padding: 16rpx;
+  padding: 20rpx;
 }
 
-.stat-card.up .stat-value { color: #e4393c; }
-.stat-card.down .stat-value { color: #52c41a; }
+.stat-card.up .stat-value { color: var(--up, #D4574E); }
+.stat-card.down .stat-value { color: var(--down, #5BA870); }
 
 .stat-icon {
-  font-size: 40rpx;
-  margin-right: 20rpx;
-  width: 72rpx;
-  height: 72rpx;
+  font-size: 42rpx;
+  margin-right: 22rpx;
+  width: 76rpx;
+  height: 76rpx;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #fef0f0;
-  border-radius: 16rpx;
+  background: var(--primary-light, #FDF2F1);
+  border-radius: 18rpx;
 }
 
 .stat-card.mini .stat-icon {
-  width: 56rpx;
-  height: 56rpx;
-  font-size: 32rpx;
-  margin-right: 16rpx;
+  width: 60rpx;
+  height: 60rpx;
+  font-size: 34rpx;
+  margin-right: 18rpx;
+  border-radius: 14rpx;
 }
 
 .stat-body {
@@ -39,27 +48,28 @@
 }
 
 .stat-value {
-  font-size: 40rpx;
+  font-size: 44rpx;
   font-weight: 700;
-  color: #1a1a1a;
+  color: var(--text, #2D2A26);
   line-height: 1.2;
 }
 
 .stat-card.mini .stat-value {
-  font-size: 32rpx;
+  font-size: 34rpx;
 }
 
 .stat-unit {
   font-size: 22rpx;
-  font-weight: 400;
-  color: #999;
+  font-weight: 500;
+  color: var(--text-muted, #B5B0AB);
   margin-left: 4rpx;
 }
 
 .stat-label {
   font-size: 24rpx;
-  color: #999;
-  margin-top: 6rpx;
+  color: var(--text-muted, #B5B0AB);
+  margin-top: 8rpx;
+  font-weight: 500;
 }
 
 .stat-card.mini .stat-label {
@@ -68,12 +78,12 @@
 
 .stat-badge {
   position: absolute;
-  top: 16rpx;
-  right: 16rpx;
+  top: 18rpx;
+  right: 18rpx;
   font-size: 20rpx;
-  padding: 4rpx 12rpx;
-  border-radius: 16rpx;
-  background: #fef0f0;
-  color: #e4393c;
+  padding: 6rpx 14rpx;
+  border-radius: 8rpx;
+  background: var(--primary-light, #FDF2F1);
+  color: var(--primary, #D4574E);
   font-weight: 600;
 }

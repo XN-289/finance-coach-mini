@@ -1,4 +1,5 @@
 {
-  "navigationBarTitleText": "今日复盘",
-  "usingComponents": {}
+  "navigationBarTitleText": "交易复盘",
+  "navigationBarBackgroundColor": "#D4574E",
+  "navigationBarTextStyle": "white"
 }

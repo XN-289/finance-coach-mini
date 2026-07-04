@@ -1,25 +1,55 @@
-/* 对话历史页面特有样式 */
+/* ===== 对话详情 v2 — 淡雅暖色设计 ===== */
+
 .nav-title {
   flex: 1;
   text-align: center;
+  font-size: 32rpx;
 }
 
 .nav-date {
   font-size: 24rpx;
-  color: #999;
+  color: rgba(255,255,255,0.7);
 }
 
 .chat-area {
   flex: 1;
-  padding: 20rpx;
+  padding: 24rpx;
 }
 
 .message-item {
-  margin-bottom: 30rpx;
+  margin-bottom: 32rpx;
+  animation: fadeIn 0.3s ease;
+  display: flex;
+  gap: 16rpx;
+  align-items: flex-start;
+}
+
+.message-item.user {
+  flex-direction: row-reverse;
+}
+
+.message-avatar {
+  width: 64rpx;
+  height: 64rpx;
+  border-radius: 50%;
+  background: var(--primary-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.avatar-text {
+  font-size: 32rpx;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10rpx); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 .message-content {
-  max-width: 70%;
+  max-width: 75%;
   display: inline-block;
 }
 
@@ -30,12 +60,12 @@
 
 .message-text {
   font-size: 28rpx;
-  line-height: 1.8;
-  color: #333;
-  background-color: #fff;
-  padding: 20rpx;
-  border-radius: 12rpx;
-  box-shadow: 0 1rpx 4rpx rgba(0, 0, 0, 0.08);
+  line-height: 1.9;
+  color: var(--text);
+  background-color: var(--card-bg);
+  padding: 24rpx;
+  border-radius: 20rpx;
+  box-shadow: 0 2rpx 12rpx rgba(45, 42, 38, 0.06);
   white-space: pre-wrap;
   word-break: break-all;
   text-align: left;
@@ -43,15 +73,17 @@
 }
 
 .message-item.user .message-text {
-  background-color: #e4393c;
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
   color: #fff;
+  box-shadow: 0 4rpx 16rpx rgba(212, 87, 78, 0.2);
 }
 
 .message-time {
   display: block;
   font-size: 22rpx;
-  color: #999;
-  margin-top: 8rpx;
+  color: var(--text-muted);
+  margin-top: 10rpx;
+  font-weight: 500;
 }
 
 .message-item.user .message-time {
@@ -65,29 +97,32 @@
 
 .action-btn {
   flex: 1;
-  padding: 20rpx;
+  padding: 22rpx;
   font-size: 28rpx;
-  border-radius: 8rpx;
+  font-weight: 600;
+  border-radius: 14rpx;
   border: none;
-  background-color: #f5f5f5;
-  color: #333;
+  transition: all 0.2s ease;
 }
 
 .action-btn.delete {
-  background-color: #f5f5f5;
-  color: #999;
+  background: var(--input-bg);
+  color: var(--text-muted);
 }
 
 .action-btn.archive {
-  background-color: #e4393c;
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
   color: #fff;
+  box-shadow: 0 4rpx 16rpx rgba(212, 87, 78, 0.2);
 }
 
 .action-btn.unarchive {
-  background-color: #e4393c;
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
   color: #fff;
+  box-shadow: 0 4rpx 16rpx rgba(212, 87, 78, 0.2);
 }
 
 .action-btn:active {
-  opacity: 0.8;
+  opacity: 0.85;
+  transform: scale(0.98);
 }

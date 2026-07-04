@@ -1,5 +1,8 @@
 {
   "navigationBarTitleText": "数据仪表盘",
+  "navigationBarBackgroundColor": "#D4574E",
+  "navigationBarTextStyle": "white",
+  "enablePullDownRefresh": true,
   "usingComponents": {
     "stat-card": "/components/stat-card/stat-card",
     "mini-chart": "/components/mini-chart/mini-chart",

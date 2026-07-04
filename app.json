@@ -11,14 +11,14 @@
   ],
   "window": {
     "navigationBarTitleText": "交易教练",
-    "navigationBarBackgroundColor": "#e4393c",
+    "navigationBarBackgroundColor": "#D4574E",
     "navigationBarTextStyle": "white",
-    "backgroundColor": "#f5f6f8",
+    "backgroundColor": "#F8F5F2",
     "backgroundTextStyle": "dark"
   },
   "tabBar": {
-    "color": "#999999",
-    "selectedColor": "#e4393c",
+    "color": "#B5B0AB",
+    "selectedColor": "#D4574E",
     "backgroundColor": "#ffffff",
     "borderStyle": "white",
     "list": [

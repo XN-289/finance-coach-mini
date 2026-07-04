@@ -63,7 +63,7 @@ Page({
       label: w.label,
       value: w.count,
       percent: Math.min(100, (w.count / 7) * 100),
-      color: w.count >= 5 ? '#52c41a' : w.count >= 3 ? '#1890ff' : '#e4393c'
+      color: w.count >= 5 ? '#5BA870' : w.count >= 3 ? '#5B8FD4' : '#D4574E'
     }))
 
     // 执行率趋势
@@ -71,7 +71,7 @@ Page({
       label: t.date,
       value: t.adherence >= 0 ? t.adherence + '%' : '-',
       height: t.adherence >= 0 ? Math.max(8, t.adherence) : 4,
-      color: t.adherence >= 70 ? '#52c41a' : t.adherence >= 40 ? '#faad14' : t.adherence >= 0 ? '#e4393c' : '#f0f0f0'
+      color: t.adherence >= 70 ? '#5BA870' : t.adherence >= 40 ? '#E8A84C' : t.adherence >= 0 ? '#D4574E' : '#F3EFEC'
     }))
 
     // 月度交易趋势
@@ -80,7 +80,7 @@ Page({
       label: m.label.substring(5),
       value: m.trades,
       percent: (m.trades / maxTrades) * 100,
-      color: '#1890ff'
+      color: '#5B8FD4'
     }))
 
     this.setData({

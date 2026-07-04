@@ -23,6 +23,12 @@
         </button>
       </view>
 
+      <!-- 加载提示 -->
+      <view wx:if="{{loading}}" class="loading-hint">
+        <view class="loading-spinner"></view>
+        <text>正在生成分析报告...</text>
+      </view>
+
       <!-- 历史周期复盘列表 -->
       <view class="history-section">
         <view class="section-title">历史周期复盘</view>
@@ -35,7 +41,7 @@
             data-id="{{item.id}}"
           >
             <view class="period-type">
-              <text class="type-label">{{item.type === 'week' ? '周复盘' : '月复盘'}}</text>
+              <text class="type-label">{{item.type === 'week' ? '📊 周复盘' : '📈 月复盘'}}</text>
               <text class="date-range">{{item.startDate}} ~ {{item.endDate}}</text>
             </view>
             <text class="analyze-time">生成于 {{formatDate(item.timestamp)}}</text>
@@ -48,7 +54,7 @@
     <!-- 周期复盘详情 -->
     <view wx:if="{{periodReview}}" class="review-section">
       <view class="period-header">
-        <text class="period-type">{{periodReview.type === 'week' ? '周复盘' : '月复盘'}}</text>
+        <text class="period-type">{{periodReview.type === 'week' ? '📊 周复盘' : '📈 月复盘'}}</text>
         <text class="date-range">{{periodReview.startDate}} ~ {{periodReview.endDate}}</text>
       </view>
 
@@ -71,7 +77,7 @@
 
       <!-- 行为标签分布 -->
       <view wx:if="{{tagStats.length > 0}}" class="tags-section">
-        <view class="section-label">行为标签分布</view>
+        <view class="section-label">🏷️ 行为标签分布</view>
         <view class="tag-list">
           <view wx:for="{{tagStats}}" wx:key="tag" class="tag-row">
             <text class="tag-name">{{item.tag}}</text>
@@ -85,7 +91,7 @@
 
       <!-- 计划执行力趋势 -->
       <view wx:if="{{trendData.length > 0}}" class="trend-section">
-        <view class="section-label">计划执行力趋势</view>
+        <view class="section-label">📊 计划执行力趋势</view>
         <view class="trend-list">
           <view wx:for="{{trendData}}" wx:key="date" class="trend-row {{item.ratio === null ? 'no-trade' : ''}}">
             <text class="trend-date">{{item.date}}</text>
@@ -108,7 +114,7 @@
 
       <!-- AI分析结果 -->
       <view class="analysis-section">
-        <view class="section-label">AI分析</view>
+        <view class="section-label">🤖 AI分析</view>
         <text class="ai-text">{{periodReview.aiAnalysis}}</text>
       </view>
     </view>

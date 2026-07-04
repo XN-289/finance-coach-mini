@@ -1,4 +1,5 @@
 {
-  "navigationBarTitleText": "对话历史",
-  "usingComponents": {}
+  "navigationBarTitleText": "对话详情",
+  "navigationBarBackgroundColor": "#D4574E",
+  "navigationBarTextStyle": "white"
 }

@@ -10,7 +10,7 @@ Page({
     stats: null,
     showBackupModal: false,
     backupData: '',
-    version: '2.0.0'
+    version: '2.1.0'
   },
 
   onLoad() {
@@ -117,14 +117,14 @@ Page({
       title: '⚠️ 危险操作',
       content: '将清空所有复盘、对话和周期复盘数据。此操作不可恢复！建议先导出备份。',
       confirmText: '确认清空',
-      confirmColor: '#e4393c',
+      confirmColor: '#D4574E',
       success: (res) => {
         if (res.confirm) {
           wx.showModal({
             title: '二次确认',
             content: '真的要清空所有数据吗？',
             confirmText: '清空',
-            confirmColor: '#e4393c',
+            confirmColor: '#D4574E',
             success: (res2) => {
               if (res2.confirm) {
                 wx.removeStorageSync('reviews')

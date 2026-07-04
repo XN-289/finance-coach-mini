@@ -1,28 +1,44 @@
 <view class="container">
   <scroll-view class="content-area" scroll-y>
-    <view class="review-section">
-      <view class="section-title">你的复盘</view>
+    <!-- 用户复盘内容 -->
+    <view class="review-section animate-slideInUp">
+      <view class="section-header">
+        <view class="section-title">📝 你的复盘</view>
+      </view>
       <text class="review-text">{{reviewText}}</text>
     </view>
 
-    <view wx:if="{{aiReply}}" class="ai-section">
+    <!-- AI 分析结果 -->
+    <view wx:if="{{aiReply}}" class="ai-section animate-slideInUp">
       <view class="section-header">
-        <view class="section-title">严正教练</view>
+        <view class="section-title">🎯 严正教练</view>
         <view class="ai-actions">
-          <text wx:if="{{streaming}}" class="streaming-badge">输出中...</text>
+          <text wx:if="{{streaming}}" class="streaming-badge">分析中</text>
           <text class="copy-btn" bindtap="copyReply">复制</text>
         </view>
       </view>
-      <text class="ai-text" user-select="true">{{streaming ? displayReply : aiReply}}</text>
-      <view wx:if="{{streaming}}" class="typing-cursor">|</view>
+      <view class="ai-reply-body">
+        <text class="ai-text" user-select="true">{{streaming ? displayReply : aiReply}}</text>
+        <text wx:if="{{streaming}}" class="typing-cursor">|</text>
+      </view>
     </view>
 
-    <view wx:if="{{loading}}" class="loading">
-      <text class="loading-text">严正教练正在深度分析<span class="loading-dots">...</span></text>
-      <view class="loading-spinner"></view>
-      <text class="loading-tip">结合历史复盘与市场数据，请稍候</text>
+    <!-- 加载态 -->
+    <view wx:if="{{loading}}" class="loading-card">
+      <view class="loading-avatar">
+        <text class="avatar-emoji">🎯</text>
+        <view class="avatar-pulse"></view>
+      </view>
+      <view class="loading-content">
+        <text class="loading-title">严正教练正在深度分析</text>
+        <text class="loading-desc">结合历史复盘与市场数据，请稍候...</text>
+        <view class="loading-bar">
+          <view class="loading-bar-fill"></view>
+        </view>
+      </view>
     </view>
 
+    <!-- 错误态 -->
     <view wx:if="{{error}}" class="error-section">
       <view class="error-icon">⚠️</view>
       <text class="error-text">{{errorMsg}}</text>

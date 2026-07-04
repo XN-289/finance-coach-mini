@@ -1,4 +1,5 @@
 {
-  "navigationBarTitleText": "严正教练",
-  "usingComponents": {}
+  "navigationBarTitleText": "AI 教练",
+  "navigationBarBackgroundColor": "#D4574E",
+  "navigationBarTextStyle": "white"
 }

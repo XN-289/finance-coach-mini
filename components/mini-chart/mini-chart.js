@@ -5,7 +5,7 @@ Component({
     chartData: { type: Array, value: [] },
     value: { type: String, value: '0' },
     subtitle: { type: String, value: '' },
-    ringColor: { type: String, value: '#e4393c' },
+    ringColor: { type: String, value: '#D4574E' },
     ringPercent: { type: Number, value: 0 }
   }
 })

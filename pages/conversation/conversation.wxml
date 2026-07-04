@@ -8,6 +8,9 @@
 
   <scroll-view class="chat-area" scroll-y scroll-into-view="{{scrollToView}}" scroll-with-animation>
     <view wx:for="{{conversation.messages}}" wx:key="time" id="msg-{{item.time}}" class="message-item message-{{item.role}}">
+      <view class="message-avatar" wx:if="{{item.role === 'ai'}}">
+        <text class="avatar-text">🎯</text>
+      </view>
       <view class="message-content">
         <text class="message-text">{{item.content}}</text>
         <text class="message-time">{{formatTime(item.time)}}</text>

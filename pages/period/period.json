@@ -1,4 +1,5 @@
 {
   "navigationBarTitleText": "周期复盘",
-  "usingComponents": {}
+  "navigationBarBackgroundColor": "#D4574E",
+  "navigationBarTextStyle": "white"
 }

@@ -1,3 +1,5 @@
+/* ===== 进度条组件 v2 ===== */
+
 .progress-container {
   width: 100%;
 }
@@ -6,35 +8,47 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 10rpx;
+  margin-bottom: 12rpx;
 }
 
 .progress-label {
   font-size: 24rpx;
-  color: #666;
+  color: var(--text-secondary, #8A8580);
+  font-weight: 500;
 }
 
 .progress-value {
   font-size: 24rpx;
-  font-weight: 600;
-  color: #1a1a1a;
+  font-weight: 700;
+  color: var(--text, #2D2A26);
 }
 
 .progress-track {
-  height: 12rpx;
-  background: #f0f0f0;
-  border-radius: 6rpx;
+  height: 14rpx;
+  background: var(--divider, #F3EFEC);
+  border-radius: 7rpx;
   overflow: hidden;
 }
 
 .progress-fill {
   height: 100%;
-  border-radius: 6rpx;
+  border-radius: 7rpx;
   transition: width 0.6s ease;
-  background: #e4393c;
+  background: linear-gradient(90deg, var(--primary, #D4574E), var(--primary-dark, #B8433B));
 }
 
-.progress-fill.green { background: #52c41a; }
-.progress-fill.blue { background: #1890ff; }
-.progress-fill.orange { background: #faad14; }
-.progress-fill.red { background: #e4393c; }
+.progress-fill.green {
+  background: linear-gradient(90deg, var(--success, #5BA870), #4A9A62);
+}
+
+.progress-fill.blue {
+  background: linear-gradient(90deg, var(--info, #5B8FD4), #4A7BC4);
+}
+
+.progress-fill.orange {
+  background: linear-gradient(90deg, var(--warning, #E8A84C), #D49A3E);
+}
+
+.progress-fill.red {
+  background: linear-gradient(90deg, var(--primary, #D4574E), var(--primary-dark, #B8433B));
+}

@@ -1,4 +1,6 @@
 {
   "navigationBarTitleText": "自选股",
-  "usingComponents": {}
+  "navigationBarBackgroundColor": "#D4574E",
+  "navigationBarTextStyle": "white",
+  "enablePullDownRefresh": true
 }

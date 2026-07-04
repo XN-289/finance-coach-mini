@@ -7,6 +7,7 @@
   </view>
 
   <scroll-view class="content-area" scroll-y>
+    <!-- 复盘头部 -->
     <view class="review-section">
       <view class="section-header">
         <text class="section-title">{{review.date}}</text>
@@ -14,18 +15,21 @@
       </view>
 
       <view class="review-content">
+        <!-- 大盘记录 -->
         <view class="review-item" wx:if="{{review.formData.market}}">
-          <view class="item-label">大盘记录</view>
+          <view class="item-label">🏛️ 大盘记录</view>
           <text class="item-text">{{review.formData.market}}</text>
         </view>
 
+        <!-- 题材与主线 -->
         <view class="review-item" wx:if="{{review.formData.theme}}">
-          <view class="item-label">题材与主线</view>
+          <view class="item-label">🔥 题材与主线</view>
           <text class="item-text">{{review.formData.theme}}</text>
         </view>
 
+        <!-- 知行合一 -->
         <view class="review-item">
-          <view class="item-label">知行合一</view>
+          <view class="item-label">⚖️ 知行合一</view>
 
           <!-- 买入 -->
           <view wx:if="{{review.formData.buyList.length > 0}}">
@@ -61,21 +65,31 @@
           </view>
         </view>
 
+        <!-- 自我评价 -->
         <view class="review-item" wx:if="{{review.formData.selfAssessment}}">
-          <view class="item-label">自我评价</view>
+          <view class="item-label">💭 自我评价</view>
           <text class="item-text">{{review.formData.selfAssessment}}</text>
         </view>
 
+        <!-- 明日计划 -->
         <view class="review-item" wx:if="{{review.formData.tomorrow}}">
-          <view class="item-label">明日If-Then计划</view>
+          <view class="item-label">🎯 明日If-Then计划</view>
           <text class="item-text">{{review.formData.tomorrow}}</text>
         </view>
       </view>
     </view>
 
+    <!-- 行为标签 -->
+    <view wx:if="{{review.tags && review.tags.length > 0}}" class="review-section">
+      <view class="item-label">🏷️ 行为标签</view>
+      <view class="tag-list">
+        <text wx:for="{{review.tags}}" wx:key="*this" class="tag-item">{{item}}</text>
+      </view>
+    </view>
+
     <!-- 未回答的追问 -->
     <view wx:if="{{review.pendingQuestions && review.pendingQuestions.length > 0}}" class="questions-section">
-      <view class="section-title">教练的追问</view>
+      <view class="section-title">❓ 教练的追问</view>
       <view
         wx:for="{{review.pendingQuestions}}"
         wx:key="id"
@@ -92,12 +106,13 @@
             bindtap="markQuestionAnswered"
           >标记已答</text>
         </view>
-        <text wx:else class="answered-tag">已回答</text>
+        <text wx:else class="answered-tag">✓ 已回答</text>
       </view>
     </view>
 
+    <!-- AI 分析 -->
     <view wx:if="{{review.aiReply}}" class="ai-section">
-      <view class="section-title">交易教练</view>
+      <view class="section-title">🎯 交易教练</view>
       <text class="ai-text">{{review.aiReply}}</text>
     </view>
   </scroll-view>
