@@ -1,7 +1,5 @@
 const storage = require('../../utils/storage')
-const { callAI } = require('../../utils/api')
 const { getTodayDate } = require('../../utils/date')
-const { getMarketSnapshot } = require('../../utils/market')
 const { runAgent } = require('../../utils/agent')
 
 const SYSTEM_PROMPT = `你叫"严正"，是一位严肃的交易教练。你不讲正确的废话，只讲交易者真正需要面对的真相。
@@ -64,16 +62,16 @@ Page({
     reviewXML: '',
     formData: null,
     aiReply: '',
-    displayReply: '', // 打字机效果用
+    displayReply: '',
     loading: false,
     streaming: false,
     error: false,
     errorMsg: '',
     conversationId: null,
     messages: [],
-    agentPhase: '',     // 当前 Agent 阶段：tools / analysis / reflection
-    agentProgress: '',  // 当前进度描述
-    toolCallsUsed: []   // 本次调用的工具列表
+    agentPhase: '',
+    agentProgress: '',
+    toolCallsUsed: []
   },
 
   onLoad(options) {
@@ -172,11 +170,9 @@ Page({
   },
 
   async getCoachReply(reviewText, formData) {
-    // 组装用户消息（不含历史数据，历史数据由 Agent 通过工具获取）
     const userMessage = reviewText
 
     try {
-      // 使用 Agent 引擎：Harness（工具调用）+ Loop（自我反思）
       const agentResult = await runAgent({
         systemPrompt: SYSTEM_PROMPT,
         userMessage,
@@ -198,7 +194,6 @@ Page({
 
       const updatedMessages = [...this.data.messages, newMessage]
 
-      // 先隐藏 loading，开始打字机效果
       this.setData({
         aiReply: cleanReply,
         loading: false,
@@ -208,7 +203,6 @@ Page({
         agentPhase: 'done'
       })
 
-      // 打字机效果
       this.typewriterEffect(cleanReply)
 
       const updatedConversation = {
@@ -246,32 +240,6 @@ Page({
         duration: 3000
       })
     }
-  },
-
-  getHistoricalContext(currentFormData) {
-    const allReviews = storage.getReviews()
-      .filter(r => !r.isDraft)
-      .sort((a, b) => b.timestamp - a.timestamp)
-
-    if (allReviews.length === 0) return ''
-
-    const recent = allReviews.slice(0, 5)
-
-    const history = recent.map((r, i) => {
-      const d = r.formData
-      const buyStocks = d.buyList.filter(b => b.stock).map(b => `${b.stock}(${b.matchPlan ? '计划内' : '计划外'})`)
-      const sellStocks = d.sellList.filter(s => s.stock).map(s => `${s.stock}(${s.matchPlan ? '计划内' : '计划外'})`)
-      const missed = d.missedList.filter(m => m.what).map(m => m.what)
-
-      const parts = [`${r.date}：`]
-      if (d.market) parts.push(`大盘：${d.market.substring(0, 50)}`)
-      if (buyStocks.length > 0) parts.push(`买入：${buyStocks.join('、')}`)
-      if (sellStocks.length > 0) parts.push(`卖出：${sellStocks.join('、')}`)
-      if (missed.length > 0) parts.push(`未执行：${missed.join('、')}`)
-      if (d.tomorrow) parts.push(`计划：${d.tomorrow.substring(0, 60)}`)
-
-      return parts.join(' | ')
-    }).join('\n') + this.getPendingInjection(allReviews)
   },
 
   generateTitle(formData) {
@@ -334,33 +302,10 @@ Page({
     }
   },
 
-  getPendingInjection(allReviews) {
-    const reviewsWithQuestions = (allReviews || [])
-      .filter(r => r.pendingQuestions)
-      .slice(0, 5)
-
-    const seen = new Set()
-    const pending = []
-    reviewsWithQuestions.forEach(r => {
-      (r.pendingQuestions || []).forEach(q => {
-        if (!q.answered && !seen.has(q.question)) {
-          seen.add(q.question)
-          pending.push(q)
-        }
-      })
-    })
-
-    if (pending.length === 0) return ''
-
-    const lines = pending.map((q, i) => (i + 1) + '. ' + q.question)
-    return '\n\n---\n【上次追问（用户尚未回答）】\n' + lines.join('\n') +
-      '\n请基于用户今天的操作，追问这些未回答的问题。如果用户今天的操作恰好触及了这些问题，指出关联。'
-  },
-
   typewriterEffect(fullText) {
     let index = 0
-    const speed = 20 // 每个字符间隔 ms
-    const chunkSize = 3 // 每次显示字符数
+    const speed = 20
+    const chunkSize = 3
 
     const type = () => {
       if (index >= fullText.length) {
@@ -376,7 +321,6 @@ Page({
   },
 
   onUnload() {
-    // 页面卸载时清理定时器，防止内存泄漏
     if (this._typewriterTimer) {
       clearTimeout(this._typewriterTimer)
     }
@@ -387,7 +331,10 @@ Page({
       loading: true,
       error: false,
       errorMsg: '',
-      aiReply: ''
+      aiReply: '',
+      agentPhase: '',
+      agentProgress: '',
+      toolCallsUsed: []
     })
     this.getCoachReply(this.data.reviewXML, this.data.formData)
   },

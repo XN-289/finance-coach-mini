@@ -177,7 +177,8 @@ function getToolDescriptions() {
  */
 function parseToolCalls(text) {
   const calls = []
-  const regex = /__TOOL_CALL__\s*:\s*(\{[^}]+\})/g
+  // 匹配 __TOOL_CALL__: 后面的 JSON 对象（支持嵌套大括号）
+  const regex = /__TOOL_CALL__\s*:\s*(\{[\s\S]*?\}(?=\s|$|__TOOL_CALL__))/g
   let match
   while ((match = regex.exec(text)) !== null) {
     try {

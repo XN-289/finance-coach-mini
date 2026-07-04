@@ -81,6 +81,12 @@
   color: var(--primary);
 }
 
+.type-label {
+  font-size: 30rpx;
+  font-weight: 700;
+  color: var(--primary);
+}
+
 .date-range {
   font-size: 26rpx;
   color: var(--text-secondary);

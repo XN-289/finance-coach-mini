@@ -1126,6 +1126,68 @@
   to { opacity: 1; }
 }
 
+/* ==============================
+   补充缺失的容器类
+   ============================== */
+
+/* 知行合一区块 */
+.actions-section {
+  border-top: 4rpx solid var(--primary);
+}
+
+/* 交易卡片容器 */
+.action-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+}
+
+/* 未执行计划卡片容器 */
+.missed-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+}
+
+/* 历史列表容器 */
+.history-list {
+  display: flex;
+  flex-direction: column;
+}
+
+/* 周期复盘列表容器 */
+.period-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12rpx;
+}
+
+/* 市场输入框特殊样式 */
+.market-input {
+  border-left: 4rpx solid var(--info);
+}
+
+/* 题材输入框特殊样式 */
+.theme-input {
+  border-left: 4rpx solid var(--warning);
+}
+
+/* 自我评价输入框特殊样式 */
+.self-input {
+  border-left: 4rpx solid var(--primary);
+}
+
+/* 明日计划输入框特殊样式 */
+.plan-input {
+  border-left: 4rpx solid var(--success);
+}
+
+/* 明日计划输入区域 */
+.plan-input-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
 @keyframes shimmer {
   0% { left: -100%; }
   100% { left: 200%; }
