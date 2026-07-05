@@ -23,6 +23,7 @@
 const storage = require('./storage')
 const { getMarketSnapshot } = require('./market')
 const { computeAllStats } = require('./stats')
+const coachingState = require('./coaching-state')
 
 const TOOLS = {
   // ══════════ 原有工具 ══════════
@@ -856,6 +857,99 @@ const TOOLS = {
           winRate: stats.winRate > peerBenchmarks.winRate ? 'above' : 'below',
           consistency: stats.streakDays > peerBenchmarks.streakDays ? 'above' : 'below'
         }
+      }
+    }
+  },
+
+  get_behavioral_arcs: {
+    name: 'get_behavioral_arcs',
+    description: '获取用户的行为弧线——每个行为标签的生命周期：首次出现、改善、复发的完整叙事。',
+    parameters: { type: 'object', properties: {} },
+    execute() {
+      const notebook = coachingState.getCoachingNotebook()
+      const arcs = notebook.behavioralArcs.map(arc => {
+        const totalSessions = arc.sessions.length
+        const appearedCount = arc.sessions.filter(s => s.appeared).length
+        const disappearedCount = totalSessions - appearedCount
+        const daysSinceFirst = Math.floor((Date.now() - arc.firstSeen) / (24 * 60 * 60 * 1000))
+
+        return {
+          tag: arc.tag,
+          status: arc.status,
+          daysSinceFirst,
+          totalSessions,
+          appearedCount,
+          disappearedCount,
+          isRelapse: arc.status === 'relapsed'
+        }
+      })
+
+      // 按状态优先级排序：relapsed > active > improved
+      arcs.sort((a, b) => {
+        const order = { relapsed: 0, active: 1, improved: 2 }
+        return (order[a.status] || 3) - (order[b.status] || 3)
+      })
+
+      return { arcs, totalArcs: arcs.length }
+    }
+  },
+
+  check_relapse: {
+    name: 'check_relapse',
+    description: '检测当前会话中是否有"复发"的行为——之前改善后又重新出现的标签。这是教练追问的核心依据。',
+    parameters: {
+      type: 'object',
+      properties: {
+        current_tags: { type: 'array', description: '当前会话提取的行为标签数组' }
+      }
+    },
+    execute({ current_tags }) {
+      if (!current_tags || current_tags.length === 0) return { relapses: [] }
+
+      const relapses = []
+      current_tags.forEach(tag => {
+        const relapse = coachingState.checkForRelapse(tag)
+        if (relapse) relapses.push(relapse)
+      })
+
+      return {
+        relapses,
+        hasRelapse: relapses.length > 0,
+        summary: relapses.length > 0
+          ? relapses.map(r => r.message).join('；')
+          : '无复发行为'
+      }
+    }
+  },
+
+  get_coaching_agenda: {
+    name: 'get_coaching_agenda',
+    description: '获取本次教练会话的议程：未兑现的承诺、复发的行为、需要追问的问题。',
+    parameters: { type: 'object', properties: {} },
+    execute() {
+      const notebook = coachingState.getCoachingNotebook()
+
+      const pendingPromises = notebook.openPromises
+        .filter(p => p.status === 'pending')
+        .map(p => ({
+          text: p.text,
+          daysSince: Math.floor((Date.now() - p.createdAt) / (24 * 60 * 60 * 1000))
+        }))
+
+      const relapsedBehaviors = notebook.behavioralArcs
+        .filter(a => a.status === 'relapsed')
+        .map(a => ({
+          tag: a.tag,
+          improvedSessions: a.sessions.filter(s => !s.appeared).length
+        }))
+
+      const focusAreas = notebook.focusAreas
+
+      return {
+        pendingPromises,
+        relapsedBehaviors,
+        focusAreas,
+        hasAgenda: pendingPromises.length > 0 || relapsedBehaviors.length > 0
       }
     }
   },

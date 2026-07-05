@@ -1,5 +1,6 @@
 const storage = require('../../utils/storage')
 const { getMarketSnapshot } = require('../../utils/market')
+const coachingState = require('../../utils/coaching-state')
 
 Page({
   data: {
@@ -76,6 +77,18 @@ Page({
   },
 
   checkSmartNotifications() {
+    // 优先使用教练状态的个性化提醒
+    const coachingReminders = coachingState.getCoachingReminders()
+    if (coachingReminders.length > 0) {
+      const topReminder = coachingReminders[0]
+      this.setData({
+        notificationMessage: topReminder.message,
+        notificationPriority: topReminder.priority
+      })
+      return
+    }
+
+    // 降级到通用提醒
     const reviews = storage.getReviews().filter(r => !r.isDraft)
     if (reviews.length === 0) return
 
@@ -83,7 +96,6 @@ Page({
     const lastReview = sorted[0]
     const hoursSinceLastReview = (Date.now() - lastReview.timestamp) / (1000 * 60 * 60)
 
-    // 3天未复盘提醒
     if (hoursSinceLastReview > 72) {
       this.setData({
         notificationMessage: '📝 已经' + Math.floor(hoursSinceLastReview / 24) + '天没复盘了，坚持才能进步！',
@@ -92,7 +104,6 @@ Page({
       return
     }
 
-    // 昨天复盘了但今天还没有
     if (hoursSinceLastReview > 20 && hoursSinceLastReview < 48) {
       this.setData({
         notificationMessage: '⏰ 昨天复盘了，今天也别落下！',
@@ -101,7 +112,6 @@ Page({
       return
     }
 
-    // 有未回答的追问
     let pendingCount = 0
     sorted.slice(0, 3).forEach(r => {
       (r.pendingQuestions || []).forEach(q => { if (!q.answered) pendingCount++ })

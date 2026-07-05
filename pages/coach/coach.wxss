@@ -616,6 +616,96 @@
   font-weight: 500;
 }
 
+/* ---------- Promises Section ---------- */
+.promises-section {
+  background: linear-gradient(135deg, var(--warning-light) 0%, var(--card-bg) 100%);
+  border-radius: 20rpx;
+  padding: 28rpx;
+  margin-bottom: 24rpx;
+  border-left: 6rpx solid var(--warning);
+}
+
+.promises-section .section-title {
+  font-size: 26rpx;
+  font-weight: 700;
+  color: var(--warning);
+  margin-bottom: 16rpx;
+}
+
+.promise-item {
+  padding: 12rpx 0;
+  border-bottom: 1rpx solid var(--divider);
+}
+
+.promise-item:last-child { border-bottom: none; }
+
+.promise-text {
+  font-size: 26rpx;
+  color: var(--text);
+  display: block;
+  line-height: 1.6;
+}
+
+.promise-age {
+  font-size: 22rpx;
+  color: var(--text-muted);
+  margin-top: 4rpx;
+  display: block;
+}
+
+/* ---------- Feedback Section ---------- */
+.feedback-section {
+  margin-top: 28rpx;
+  padding-top: 24rpx;
+  border-top: 2rpx solid var(--divider);
+}
+
+.feedback-buttons {
+  display: flex;
+  gap: 12rpx;
+  flex-wrap: wrap;
+  margin-top: 12rpx;
+}
+
+.feedback-btn {
+  padding: 14rpx 28rpx;
+  border-radius: 24rpx;
+  font-size: 24rpx;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.feedback-btn:active {
+  transform: scale(0.95);
+}
+
+.feedback-btn.helpful {
+  background: var(--success-light);
+  color: var(--success);
+}
+
+.feedback-btn.not-helpful {
+  background: var(--primary-light);
+  color: var(--primary);
+}
+
+.feedback-btn.too-harsh {
+  background: var(--warning-light);
+  color: var(--warning);
+}
+
+.feedback-btn.too-soft {
+  background: var(--info-light);
+  color: var(--info);
+}
+
+.feedback-thanks {
+  font-size: 24rpx;
+  color: var(--text-muted);
+  padding: 12rpx 0;
+  font-style: italic;
+}
+
 /* ---------- Reflection Prompts ---------- */
 .reflection-section {
   margin-top: 24rpx;

@@ -79,10 +79,11 @@ async function callAIWithRetry(messages, options, maxRetries) {
   throw lastError
 }
 
-// ── 构建 Agent 上下文 ──
+// ── 构建 Agent 上下文（含教练记忆）──
 async function buildAgentContext() {
   const storage = require('./storage')
   const { computeAllStats } = require('./stats')
+  const coachingState = require('./coaching-state')
 
   try {
     const reviews = storage.getReviews().filter(r => !r.isDraft)
@@ -108,6 +109,9 @@ async function buildAgentContext() {
       })
     })
 
+    // 获取教练记忆上下文（核心！）
+    const coachingContext = coachingState.getCoachingContext()
+
     return {
       totalReviews: reviews.length,
       stats: {
@@ -121,10 +125,11 @@ async function buildAgentContext() {
         .sort((a, b) => b[1] - a[1])
         .slice(0, 5)
         .map(([tag, count]) => tag + '(' + count + ')'),
-      experienceLevel: reviews.length < 5 ? 'beginner' : reviews.length < 20 ? 'intermediate' : 'advanced'
+      experienceLevel: reviews.length < 5 ? 'beginner' : reviews.length < 20 ? 'intermediate' : 'advanced',
+      coachingContext // 教练记忆：上次说了什么、未兑现承诺、复发行为、焦点区域
     }
   } catch (e) {
-    return { totalReviews: 0, stats: {}, pendingQuestions: [], topTags: [], experienceLevel: 'beginner' }
+    return { totalReviews: 0, stats: {}, pendingQuestions: [], topTags: [], experienceLevel: 'beginner', coachingContext: '' }
   }
 }
 
@@ -172,12 +177,17 @@ async function runAgent({ systemPrompt, userMessage, onProgress }) {
   emitProgress('context', 5, '构建分析上下文...')
   const agentContext = await buildAgentContext()
 
-  // ── 组装增强 System Prompt ──
+  // ── 组装增强 System Prompt（含教练记忆）──
   const contextBlock = agentContext.totalReviews > 0
     ? `\n\n## 用户画像\n- 经验水平：${agentContext.experienceLevel}\n- 总复盘次数：${agentContext.totalReviews}\n- 计划执行率：${agentContext.stats.planAdherenceRate}%\n- 连续复盘：${agentContext.stats.streakDays}天\n- 高频标签：${agentContext.topTags.join('、') || '暂无'}\n- 未回答追问：${agentContext.pendingQuestions.length > 0 ? agentContext.pendingQuestions.join('；') : '无'}`
     : ''
 
-  const toolAwarePrompt = systemPrompt + contextBlock + `
+  // 教练记忆注入（核心！让教练"记得"上次说了什么）
+  const coachingMemoryBlock = agentContext.coachingContext
+    ? '\n\n' + agentContext.coachingContext
+    : ''
+
+  const toolAwarePrompt = systemPrompt + contextBlock + coachingMemoryBlock + `
 
 ## 可用工具
 你可以通过调用工具来获取更多信息。在回复中使用格式：
@@ -249,7 +259,7 @@ ${toolDescriptions}
       toolDataBlock += '\n\n[工具 ' + tr.name + (tr.cached ? ' (缓存)' : '') + ']\n' + JSON.stringify(tr.result, null, 2)
     })
 
-    const analysisPrompt = systemPrompt + contextBlock + '\n\n## 工具数据' + toolDataBlock + '\n\n请基于以上数据进行深度分析，引用具体数字。\n\n## 输出要求\n- 500-800字，精炼有力\n- 引用工具数据中的具体数字\n- 指出历史模式和当前变化\n- 在末尾输出 __TAGS__:["标签1","标签2","标签3"]'
+    const analysisPrompt = systemPrompt + contextBlock + coachingMemoryBlock + '\n\n## 工具数据' + toolDataBlock + '\n\n请基于以上数据进行深度分析，引用具体数字。\n\n## 输出要求\n- 500-800字，精炼有力\n- 引用工具数据中的具体数字\n- 指出历史模式和当前变化\n- 如果有未兑现的承诺，追问用户\n- 如果有复发的行为，重点分析\n- 在末尾输出 __TAGS__:["标签1","标签2","标签3"]'
 
     try {
       finalAnalysis = await callAIWithRetry([

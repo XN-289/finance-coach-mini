@@ -1,6 +1,7 @@
 const storage = require('../../utils/storage')
 const { getTodayDate } = require('../../utils/date')
 const { runAgent } = require('../../utils/agent')
+const coachingState = require('../../utils/coaching-state')
 
 const BASE_SYSTEM_PROMPT = `你叫"严正"，是一位严肃的交易教练。你不讲正确的废话，只讲交易者真正需要面对的真相。
 
@@ -78,7 +79,9 @@ Page({
     milestones: [],
     reviewQualityScore: 0,
     reflectionPrompts: [],
-    coachingStyle: 'balanced'
+    coachingStyle: 'balanced',
+    feedbackGiven: '',
+    openPromises: []
   },
 
   onLoad(options) {
@@ -101,6 +104,10 @@ Page({
       isArchived: false
     }
 
+    // 加载未兑现的承诺（行动项生命周期）
+    const notebook = coachingState.getCoachingNotebook()
+    const openPromises = notebook.openPromises.filter(p => p.status === 'pending')
+
     this.setData({
       reviewText: displayText,
       reviewXML,
@@ -110,7 +117,8 @@ Page({
       messages: conversation.messages,
       reviewQualityScore: this.scoreReviewQuality(formData),
       reflectionPrompts: this.getReflectionPrompts(formData),
-      coachingStyle: this.detectCoachingStyle()
+      coachingStyle: this.detectCoachingStyle(),
+      openPromises
     })
 
     storage.saveConversation(conversation)
@@ -336,6 +344,17 @@ Page({
 
         storage.saveReview(review)
         storage.clearDraft()
+
+        // 更新教练笔记本（核心！）
+        coachingState.updateAfterSession({
+          reviewId: review.id,
+          aiReply: cleanReply,
+          tags,
+          actionItems,
+          pendingQuestions: pendingQuestions.map(q => q.question),
+          coachingStyle: this.data.coachingStyle,
+          formData: this.data.formData
+        })
       }
     } catch (err) {
       console.error('API调用失败:', err)
@@ -463,5 +482,20 @@ Page({
 
   onNewReview() {
     wx.navigateBack()
+  },
+
+  // ── 用户反馈循环 ──
+  onFeedback(e) {
+    const type = e.currentTarget.dataset.type
+    coachingState.recordFeedback(type)
+    this.setData({ feedbackGiven: type })
+    wx.showToast({
+      title: type === 'helpful' ? '感谢反馈！' :
+             type === 'notHelpful' ? '会继续改进' :
+             type === 'tooHarsh' ? '下次温和一些' :
+             '下次更直接一些',
+      icon: 'none',
+      duration: 1500
+    })
   }
 })

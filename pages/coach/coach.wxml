@@ -1,5 +1,14 @@
 <view class="container">
   <scroll-view class="content-area" scroll-y>
+    <!-- 未兑现的承诺（行动项生命周期） -->
+    <view wx:if="{{openPromises.length > 0}}" class="promises-section animate-slideInUp">
+      <view class="section-title">📋 你之前的承诺还没兑现</view>
+      <view wx:for="{{openPromises}}" wx:key="id" class="promise-item">
+        <text class="promise-text">{{item.text}}</text>
+        <text class="promise-age">提出{{item.createdAt}}天前</text>
+      </view>
+    </view>
+
     <!-- 用户复盘内容 -->
     <view class="review-section animate-slideInUp">
       <view class="section-header">
@@ -62,6 +71,20 @@
         <view wx:for="{{reflectionPrompts}}" wx:key="*this" class="reflection-item">
           <text class="reflection-icon">→</text>
           <text class="reflection-text">{{item}}</text>
+        </view>
+      </view>
+
+      <!-- 用户反馈（教练风格优化的核心数据源） -->
+      <view class="feedback-section">
+        <view class="section-sub-title">这次分析有用吗？</view>
+        <view wx:if="{{!feedbackGiven}}" class="feedback-buttons">
+          <text class="feedback-btn helpful" data-type="helpful" bindtap="onFeedback">👍 有用</text>
+          <text class="feedback-btn not-helpful" data-type="notHelpful" bindtap="onFeedback">👎 没用</text>
+          <text class="feedback-btn too-harsh" data-type="tooHarsh" bindtap="onFeedback">😤 太严厉</text>
+          <text class="feedback-btn too-soft" data-type="tooSoft" bindtap="onFeedback">🤝 太温和</text>
+        </view>
+        <view wx:else class="feedback-thanks">
+          <text>感谢反馈！{{feedbackGiven === 'helpful' ? '会继续保持' : feedbackGiven === 'tooHarsh' ? '下次温和一些' : feedbackGiven === 'tooSoft' ? '下次更直接' : '会努力改进'}}</text>
         </view>
       </view>
     </view>
