@@ -282,6 +282,71 @@
   background: var(--danger-light);
 }
 
+/* 历史交易股票 */
+.traded-section {
+  padding: 24rpx;
+  margin: 16rpx 0;
+  background: var(--card-bg);
+  border-radius: 16rpx;
+}
+
+.section-label {
+  font-size: 26rpx;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 16rpx;
+}
+
+.traded-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14rpx 0;
+  border-bottom: 1rpx solid var(--divider);
+}
+
+.traded-item:last-child {
+  border-bottom: none;
+}
+
+.traded-info {
+  display: flex;
+  align-items: center;
+  gap: 10rpx;
+}
+
+.traded-name {
+  font-size: 26rpx;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.frequent-badge {
+  font-size: 18rpx;
+  padding: 2rpx 10rpx;
+  background: var(--warning-light);
+  color: var(--warning);
+  border-radius: 6rpx;
+  font-weight: 600;
+}
+
+.traded-meta {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+}
+
+.traded-count {
+  font-size: 24rpx;
+  color: var(--primary);
+  font-weight: 600;
+}
+
+.traded-last {
+  font-size: 22rpx;
+  color: var(--text-muted);
+}
+
 /* 空状态 */
 .empty-state {
   display: flex;

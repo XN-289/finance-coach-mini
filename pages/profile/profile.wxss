@@ -86,6 +86,70 @@
   background: var(--divider);
 }
 
+/* 交易画像 */
+.profile-card {
+  background: var(--card-bg);
+  border-radius: 20rpx;
+  padding: 28rpx;
+  margin: 0 24rpx 20rpx;
+  box-shadow: 0 2rpx 12rpx rgba(45, 42, 38, 0.05);
+  border-left: 6rpx solid var(--info);
+}
+
+.profile-title {
+  font-size: 28rpx;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 16rpx;
+}
+
+.profile-style {
+  font-size: 32rpx;
+  font-weight: 700;
+  color: var(--primary);
+  margin-bottom: 16rpx;
+}
+
+.profile-tags {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8rpx;
+  margin-bottom: 16rpx;
+}
+
+.profile-tag-label {
+  font-size: 24rpx;
+  color: var(--text-muted);
+}
+
+.profile-tag {
+  font-size: 22rpx;
+  padding: 4rpx 14rpx;
+  background: var(--primary-light);
+  color: var(--primary);
+  border-radius: 8rpx;
+  font-weight: 600;
+}
+
+.profile-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 8rpx;
+  padding: 8rpx 0;
+}
+
+.profile-label {
+  font-size: 24rpx;
+  color: var(--text-muted);
+  flex-shrink: 0;
+}
+
+.profile-value {
+  font-size: 24rpx;
+  color: var(--text);
+}
+
 /* 菜单 */
 .menu-section {
   background: var(--card-bg);

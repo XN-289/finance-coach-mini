@@ -10,6 +10,8 @@ Page({
     weeklyBarData: [],
     adherenceTrendData: [],
     monthlyTradeData: [],
+    aiInsights: [],
+    habitScores: null,
     loading: true,
     activeTab: 'overview' // 'overview' | 'behavior' | 'market'
   },
@@ -34,10 +36,15 @@ Page({
 
       const storageUsage = getStorageUsage()
 
+      const aiInsights = this.generateInsights(stats)
+      const habitScores = stats ? stats.habitScores : null
+
       this.setData({
         stats,
         marketData,
         storageUsage,
+        aiInsights,
+        habitScores,
         loading: false
       })
 
@@ -53,6 +60,47 @@ Page({
       const stats = computeAllStats()
       resolve(stats)
     })
+  },
+
+  generateInsights(stats) {
+    if (!stats) return []
+    const insights = []
+
+    // 执行率洞察
+    if (stats.planAdherenceRate >= 70) {
+      insights.push({ icon: '✅', text: '计划执行率' + stats.planAdherenceRate + '%，保持良好！', type: 'positive' })
+    } else if (stats.planAdherenceRate >= 40) {
+      insights.push({ icon: '📊', text: '执行率' + stats.planAdherenceRate + '%，还有提升空间', type: 'neutral' })
+    } else if (stats.totalTrades > 0) {
+      insights.push({ icon: '⚠️', text: '执行率仅' + stats.planAdherenceRate + '%，需要加强计划纪律', type: 'warning' })
+    }
+
+    // 连续复盘洞察
+    if (stats.streakDays >= 7) {
+      insights.push({ icon: '🔥', text: '连续复盘' + stats.streakDays + '天，习惯已形成！', type: 'positive' })
+    } else if (stats.streakDays >= 3) {
+      insights.push({ icon: '📅', text: '连续' + stats.streakDays + '天，再坚持4天就一周了', type: 'neutral' })
+    }
+
+    // 标签洞察
+    const tags = Object.entries(stats.tagDistribution || {})
+    if (tags.length > 0) {
+      const topTag = tags[0]
+      insights.push({ icon: '🏷️', text: '最常见行为标签：' + topTag[0] + '（' + topTag[1] + '次）', type: 'info' })
+    }
+
+    // 交易频率洞察
+    const avgTrades = parseFloat(stats.avgTradesPerDay) || 0
+    if (avgTrades > 4) {
+      insights.push({ icon: '⚡', text: '日均交易' + avgTrades + '笔，注意过度交易风险', type: 'warning' })
+    }
+
+    // 未执行计划洞察
+    if (stats.missedCount > 5) {
+      insights.push({ icon: '❌', text: '累计' + stats.missedCount + '条未执行计划，深挖原因', type: 'warning' })
+    }
+
+    return insights.slice(0, 5)
   },
 
   buildChartData(stats) {

@@ -23,7 +23,9 @@ Page({
     editMode: false,
     editId: null,
     yesterdayPlans: [],
-    yesterdayPlanDate: ''
+    yesterdayPlanDate: '',
+    notificationMessage: '',
+    notificationPriority: ''
   },
 
   onLoad(options) {
@@ -34,6 +36,7 @@ Page({
     }
     this.fetchMarketData()
     this.loadYesterdayPlans()
+    this.checkSmartNotifications()
   },
 
   onShow() {
@@ -70,6 +73,49 @@ Page({
         hasDraft: true
       })
     }
+  },
+
+  checkSmartNotifications() {
+    const reviews = storage.getReviews().filter(r => !r.isDraft)
+    if (reviews.length === 0) return
+
+    const sorted = [...reviews].sort((a, b) => b.timestamp - a.timestamp)
+    const lastReview = sorted[0]
+    const hoursSinceLastReview = (Date.now() - lastReview.timestamp) / (1000 * 60 * 60)
+
+    // 3天未复盘提醒
+    if (hoursSinceLastReview > 72) {
+      this.setData({
+        notificationMessage: '📝 已经' + Math.floor(hoursSinceLastReview / 24) + '天没复盘了，坚持才能进步！',
+        notificationPriority: 'high'
+      })
+      return
+    }
+
+    // 昨天复盘了但今天还没有
+    if (hoursSinceLastReview > 20 && hoursSinceLastReview < 48) {
+      this.setData({
+        notificationMessage: '⏰ 昨天复盘了，今天也别落下！',
+        notificationPriority: 'medium'
+      })
+      return
+    }
+
+    // 有未回答的追问
+    let pendingCount = 0
+    sorted.slice(0, 3).forEach(r => {
+      (r.pendingQuestions || []).forEach(q => { if (!q.answered) pendingCount++ })
+    })
+    if (pendingCount >= 2) {
+      this.setData({
+        notificationMessage: '❓ 有' + pendingCount + '个教练追问未回答，花2分钟想想',
+        notificationPriority: 'low'
+      })
+    }
+  },
+
+  dismissNotification() {
+    this.setData({ notificationMessage: '', notificationPriority: '' })
   },
 
   loadYesterdayPlans() {

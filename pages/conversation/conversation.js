@@ -56,5 +56,17 @@ Page({
 
   formatTime(timestamp) {
     return formatTime(timestamp)
+  },
+
+  copyConversation() {
+    if (!this.data.conversation) return
+    const text = this.data.conversation.messages.map(m => {
+      const role = m.role === 'user' ? '用户' : 'AI教练'
+      return '[' + role + ']\n' + m.content
+    }).join('\n\n---\n\n')
+    wx.setClipboardData({
+      data: text,
+      success: () => wx.showToast({ title: '已复制', icon: 'success' })
+    })
   }
 })

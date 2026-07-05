@@ -8,9 +8,10 @@ Page({
     themeName: 'light',
     storageUsage: null,
     stats: null,
+    tradingProfile: null,
     showBackupModal: false,
     backupData: '',
-    version: '2.1.0'
+    version: '3.0.0'
   },
 
   onLoad() {
@@ -25,7 +26,30 @@ Page({
   loadData() {
     const storageUsage = getStorageUsage()
     const stats = computeAllStats()
-    this.setData({ storageUsage, stats })
+    const tradingProfile = this.buildTradingProfile(stats)
+    this.setData({ storageUsage, stats, tradingProfile })
+  },
+
+  buildTradingProfile(stats) {
+    if (!stats || stats.totalDays === 0) return null
+
+    const topTags = Object.entries(stats.tagDistribution || {}).slice(0, 3).map(([tag]) => tag)
+    const avgTrades = parseFloat(stats.avgTradesPerDay) || 0
+
+    let style = '均衡型'
+    if (avgTrades > 4) style = '高频交易型'
+    else if (avgTrades > 2) style = '活跃型'
+    else if (avgTrades <= 1) style = '耐心型'
+
+    if (stats.planAdherenceRate >= 70) style += ' · 纪律者'
+    else if (stats.planAdherenceRate < 40) style += ' · 冲动型'
+
+    return {
+      style,
+      topTags: topTags.length > 0 ? topTags : ['暂无'],
+      strengths: stats.planAdherenceRate >= 60 ? '计划执行力较强' : '交易活跃度高',
+      weaknesses: stats.missedCount > 5 ? '未执行计划较多' : (topTags[0] || '需要更多数据')
+    }
   },
 
   // ===== 主题切换 =====
@@ -147,15 +171,23 @@ Page({
   showAbout() {
     wx.showModal({
       title: '关于交易教练',
-      content: `版本：${this.data.version}
+      content: `版本：${this.data.version} (AI Agentic)
 
-一款基于 AI 的股票交易复盘工具，帮助交易者建立系统化的复盘习惯，识别行为偏差，提升知行合一的能力。
+一款基于 AI Agent 的股票交易复盘工具，帮助交易者建立系统化的复盘习惯，识别行为偏差，提升知行合一的能力。
+
+v3.0 AI Agentic 升级：
+• AI Agent 引擎：多步推理、工具编排、自我修正
+• 16+ AI 工具：模式检测、风险评估、情绪分析、偏差识别
+• 智能教练：自适应分析、语气调整、进度追踪
+• 智能表单：自动分类、计划质量评分、历史建议
+• 元智能：自我改进、异常检测、预测评分、个性化
 
 核心功能：
 • 每日交易复盘记录
 • AI 教练深度分析
 • 行为标签追踪
-• 数据仪表盘
+• 数据仪表盘 + AI 洞察
+• 习惯评分系统
 • 自选股管理
 • 周期复盘总结
 • 数据导出备份`,

@@ -1,4 +1,10 @@
 <view class="container">
+  <!-- 智能通知 -->
+  <view wx:if="{{notificationMessage}}" class="notification-bar notification-{{notificationPriority}}">
+    <text class="notification-text">{{notificationMessage}}</text>
+    <text class="notification-close" bindtap="dismissNotification">×</text>
+  </view>
+
   <!-- 草稿提示条 -->
   <view wx:if="{{hasDraft}}" class="draft-bar">
     <text>📝 发现未完成的草稿</text>

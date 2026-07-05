@@ -41,6 +41,38 @@
 
     <!-- 总览 Tab -->
     <view wx:if="{{activeTab === 'overview'}}" class="tab-content">
+      <!-- AI 洞察 -->
+      <view wx:if="{{aiInsights.length > 0}}" class="section-card insights-card">
+        <view class="card-title">🤖 AI 洞察</view>
+        <view wx:for="{{aiInsights}}" wx:key="text" class="insight-row insight-{{item.type}}">
+          <text class="insight-icon">{{item.icon}}</text>
+          <text class="insight-text">{{item.text}}</text>
+        </view>
+      </view>
+
+      <!-- 习惯评分 -->
+      <view wx:if="{{habitScores}}" class="section-card">
+        <view class="card-title">🎯 习惯评分</view>
+        <view class="habit-grid">
+          <view class="habit-item">
+            <text class="habit-value">{{habitScores.planning}}%</text>
+            <text class="habit-label">计划习惯</text>
+          </view>
+          <view class="habit-item">
+            <text class="habit-value">{{habitScores.patience}}%</text>
+            <text class="habit-label">耐心习惯</text>
+          </view>
+          <view class="habit-item">
+            <text class="habit-value">{{habitScores.riskMgmt}}%</text>
+            <text class="habit-label">风控习惯</text>
+          </view>
+          <view class="habit-item">
+            <text class="habit-value">{{habitScores.overall}}%</text>
+            <text class="habit-label">综合评分</text>
+          </view>
+        </view>
+      </view>
+
       <!-- 核心指标网格 -->
       <view class="stats-grid">
         <stat-card

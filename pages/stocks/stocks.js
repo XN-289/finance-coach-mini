@@ -8,11 +8,13 @@ Page({
     isSearching: false,
     showSearch: false,
     loading: false,
-    refreshing: false
+    refreshing: false,
+    tradedStocks: []
   },
 
   onLoad() {
     this.loadWatchlist()
+    this.loadTradedStocks()
   },
 
   onShow() {
@@ -23,6 +25,41 @@ Page({
     this.refreshQuotes().then(() => {
       wx.stopPullDownRefresh()
     })
+  },
+
+  loadTradedStocks() {
+    const storage = require('../../utils/storage')
+    const reviews = storage.getReviews().filter(r => !r.isDraft)
+    const stockCount = {}
+    const lastTrade = {}
+    reviews.forEach(r => {
+      r.formData.buyList.forEach(b => {
+        if (b.stock) {
+          stockCount[b.stock] = (stockCount[b.stock] || 0) + 1
+          if (!lastTrade[b.stock] || r.timestamp > lastTrade[b.stock].time) {
+            lastTrade[b.stock] = { time: r.timestamp, direction: '买入', date: r.date }
+          }
+        }
+      })
+      r.formData.sellList.forEach(s => {
+        if (s.stock) {
+          stockCount[s.stock] = (stockCount[s.stock] || 0) + 1
+          if (!lastTrade[s.stock] || r.timestamp > lastTrade[s.stock].time) {
+            lastTrade[s.stock] = { time: s.timestamp, direction: '卖出', date: r.date }
+          }
+        }
+      })
+    })
+    const tradedStocks = Object.entries(stockCount)
+      .map(([name, count]) => ({
+        name, count,
+        isFrequent: count >= 3,
+        lastDirection: lastTrade[name] ? lastTrade[name].direction : '',
+        lastDate: lastTrade[name] ? lastTrade[name].date : ''
+      }))
+      .sort((a, b) => b.count - a.count)
+      .slice(0, 10)
+    this.setData({ tradedStocks })
   },
 
   async loadWatchlist() {

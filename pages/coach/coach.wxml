@@ -4,8 +4,18 @@
     <view class="review-section animate-slideInUp">
       <view class="section-header">
         <view class="section-title">📝 你的复盘</view>
+        <view wx:if="{{reviewQualityScore > 0}}" class="quality-badge quality-{{reviewQualityScore >= 70 ? 'good' : reviewQualityScore >= 40 ? 'fair' : 'poor'}}">
+          质量 {{reviewQualityScore}}分
+        </view>
       </view>
       <text class="review-text">{{reviewText}}</text>
+    </view>
+
+    <!-- 里程碑通知 -->
+    <view wx:if="{{milestones.length > 0}}" class="milestone-section animate-slideInUp">
+      <view wx:for="{{milestones}}" wx:key="type" class="milestone-item">
+        <text class="milestone-text">{{item.message}}</text>
+      </view>
     </view>
 
     <!-- AI 分析结果 -->
@@ -28,6 +38,32 @@
         <text class="ai-text" user-select="true">{{streaming ? displayReply : aiReply}}</text>
         <text wx:if="{{streaming}}" class="typing-cursor">|</text>
       </view>
+
+      <!-- 行动项清单 -->
+      <view wx:if="{{actionItems.length > 0}}" class="action-items-section">
+        <view class="section-sub-title">📋 行动清单</view>
+        <view wx:for="{{actionItems}}" wx:key="*this" class="action-item-row">
+          <text class="action-item-icon">☐</text>
+          <text class="action-item-text">{{item}}</text>
+        </view>
+      </view>
+
+      <!-- 跟进问题 -->
+      <view wx:if="{{followUpQuestions.length > 0}}" class="followup-section">
+        <view class="section-sub-title">💬 思考一下</view>
+        <view wx:for="{{followUpQuestions}}" wx:key="*this" class="followup-chip">
+          <text>{{item}}</text>
+        </view>
+      </view>
+
+      <!-- 反思提示 -->
+      <view wx:if="{{reflectionPrompts.length > 0}}" class="reflection-section">
+        <view class="section-sub-title">🪞 下次交易前想想</view>
+        <view wx:for="{{reflectionPrompts}}" wx:key="*this" class="reflection-item">
+          <text class="reflection-icon">→</text>
+          <text class="reflection-text">{{item}}</text>
+        </view>
+      </view>
     </view>
 
     <!-- 加载态：显示 Agent 各阶段进度 -->
@@ -39,28 +75,43 @@
       <view class="loading-content">
         <text class="loading-title">严正教练正在深度分析</text>
 
+        <!-- 进度条 -->
+        <view class="progress-container">
+          <view class="progress-bar-track">
+            <view class="progress-bar-fill" style="width: {{agentProgressPct}}%"></view>
+          </view>
+          <text class="progress-pct">{{agentProgressPct}}%</text>
+        </view>
+
         <!-- Agent 阶段进度 -->
         <view class="agent-phases">
-          <view class="phase-item {{agentPhase === 'tools' ? 'active' : (agentPhase === 'analysis' || agentPhase === 'reflection' || agentPhase === 'done') ? 'done' : ''}}">
-            <text class="phase-icon">{{agentPhase === 'tools' ? '⏳' : (agentPhase === 'analysis' || agentPhase === 'reflection' || agentPhase === 'done') ? '✅' : '○'}}</text>
+          <view class="phase-item {{agentPhase === 'context' ? 'active' : (agentPhase === 'tools' || agentPhase === 'analysis' || agentPhase === 'reflection' || agentPhase === 'correction' || agentPhase === 'done') ? 'done' : ''}}">
+            <text class="phase-icon">{{agentPhase === 'context' ? '⏳' : (agentPhase === 'tools' || agentPhase === 'analysis' || agentPhase === 'reflection' || agentPhase === 'correction' || agentPhase === 'done') ? '✅' : '○'}}</text>
+            <text class="phase-text">构建上下文</text>
+          </view>
+          <view class="phase-line"></view>
+          <view class="phase-item {{agentPhase === 'tools' ? 'active' : (agentPhase === 'analysis' || agentPhase === 'reflection' || agentPhase === 'correction' || agentPhase === 'done') ? 'done' : ''}}">
+            <text class="phase-icon">{{agentPhase === 'tools' ? '⏳' : (agentPhase === 'analysis' || agentPhase === 'reflection' || agentPhase === 'correction' || agentPhase === 'done') ? '✅' : '○'}}</text>
             <text class="phase-text">收集数据</text>
           </view>
           <view class="phase-line"></view>
-          <view class="phase-item {{agentPhase === 'analysis' ? 'active' : (agentPhase === 'reflection' || agentPhase === 'done') ? 'done' : ''}}">
-            <text class="phase-icon">{{agentPhase === 'analysis' ? '⏳' : (agentPhase === 'reflection' || agentPhase === 'done') ? '✅' : '○'}}</text>
+          <view class="phase-item {{agentPhase === 'analysis' ? 'active' : (agentPhase === 'reflection' || agentPhase === 'correction' || agentPhase === 'done') ? 'done' : ''}}">
+            <text class="phase-icon">{{agentPhase === 'analysis' ? '⏳' : (agentPhase === 'reflection' || agentPhase === 'correction' || agentPhase === 'done') ? '✅' : '○'}}</text>
             <text class="phase-text">生成分析</text>
           </view>
           <view class="phase-line"></view>
-          <view class="phase-item {{agentPhase === 'reflection' ? 'active' : agentPhase === 'done' ? 'done' : ''}}">
-            <text class="phase-icon">{{agentPhase === 'reflection' ? '⏳' : agentPhase === 'done' ? '✅' : '○'}}</text>
-            <text class="phase-text">自我检查</text>
+          <view class="phase-item {{agentPhase === 'reflection' ? 'active' : (agentPhase === 'correction' || agentPhase === 'done') ? 'done' : ''}}">
+            <text class="phase-icon">{{agentPhase === 'reflection' ? '⏳' : (agentPhase === 'correction' || agentPhase === 'done') ? '✅' : '○'}}</text>
+            <text class="phase-text">质量审查</text>
+          </view>
+          <view class="phase-line"></view>
+          <view class="phase-item {{agentPhase === 'correction' ? 'active' : agentPhase === 'done' ? 'done' : ''}}">
+            <text class="phase-icon">{{agentPhase === 'correction' ? '⏳' : agentPhase === 'done' ? '✅' : '○'}}</text>
+            <text class="phase-text">优化修正</text>
           </view>
         </view>
 
         <text class="loading-desc">{{agentProgress || '结合历史复盘与市场数据，请稍候...'}}</text>
-        <view class="loading-bar">
-          <view class="loading-bar-fill"></view>
-        </view>
       </view>
     </view>
 

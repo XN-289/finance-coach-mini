@@ -161,6 +161,37 @@ function getStorageUsage() {
 }
 
 /**
+ * 生成交易日志（结构化格式）
+ */
+function generateTradeJournal(reviews) {
+  const sorted = [...reviews].filter(r => !r.isDraft).sort((a, b) => a.timestamp - b.timestamp)
+  const lines = []
+
+  lines.push('日期,股票,方向,理由,计划内,标签')
+  sorted.forEach(r => {
+    const tags = (r.tags || []).join('|')
+    r.formData.buyList.forEach(b => {
+      if (b.stock) {
+        lines.push([r.date, b.stock, '买入', '"' + (b.reason || '') + '"', b.matchPlan ? '是' : '否', '"' + tags + '"'].join(','))
+      }
+    })
+    r.formData.sellList.forEach(s => {
+      if (s.stock) {
+        lines.push([r.date, s.stock, '卖出', '"' + (s.reason || '') + '"', s.matchPlan ? '是' : '否', '"' + tags + '"'].join(','))
+      }
+    })
+  })
+
+  // 汇总
+  const totalBuys = sorted.reduce((s, r) => s + r.formData.buyList.filter(b => b.stock).length, 0)
+  const totalSells = sorted.reduce((s, r) => s + r.formData.sellList.filter(s => s.stock).length, 0)
+  lines.push('')
+  lines.push('汇总,,' + totalBuys + '笔买入,' + totalSells + '笔卖出,,')
+
+  return lines.join('\n')
+}
+
+/**
  * 清理过期数据（保留最近 N 天）
  */
 function cleanupOldData(daysToKeep = 180) {
@@ -183,5 +214,6 @@ module.exports = {
   exportBackup,
   importBackup,
   getStorageUsage,
-  cleanupOldData
+  cleanupOldData,
+  generateTradeJournal
 }

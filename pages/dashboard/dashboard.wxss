@@ -410,6 +410,66 @@
   color: var(--down);
 }
 
+/* ===== AI 洞察 ===== */
+.insights-card {
+  border-left: 6rpx solid var(--info);
+}
+
+.insight-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 12rpx;
+  padding: 14rpx 0;
+  border-bottom: 1rpx solid var(--divider);
+}
+
+.insight-row:last-child {
+  border-bottom: none;
+}
+
+.insight-icon {
+  font-size: 28rpx;
+  flex-shrink: 0;
+}
+
+.insight-text {
+  font-size: 26rpx;
+  color: var(--text);
+  line-height: 1.6;
+}
+
+.insight-positive .insight-text { color: var(--success); }
+.insight-warning .insight-text { color: var(--warning); }
+.insight-info .insight-text { color: var(--info); }
+
+/* ===== 习惯评分 ===== */
+.habit-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20rpx;
+}
+
+.habit-item {
+  background: var(--bg);
+  border-radius: 14rpx;
+  padding: 20rpx;
+  text-align: center;
+}
+
+.habit-value {
+  font-size: 36rpx;
+  font-weight: 700;
+  color: var(--primary);
+  display: block;
+}
+
+.habit-label {
+  font-size: 22rpx;
+  color: var(--text-muted);
+  margin-top: 6rpx;
+  display: block;
+}
+
 /* ===== 空状态 ===== */
 .empty-card {
   display: flex;

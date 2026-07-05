@@ -9,7 +9,7 @@ App({
   globalData: {
     theme: null,
     themeName: 'light',
-    version: '2.1.0',
+    version: '3.0.0',
     userInfo: null,
     storageUsage: null
   },

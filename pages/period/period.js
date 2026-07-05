@@ -90,11 +90,36 @@ Page({
 
   async generatePeriodAnalysis(type, summary, reviews) {
     const typeLabel = type === 'week' ? '一周' : '一个月'
+
+    // 构建结构化数据
+    let totalBuys = 0, totalSells = 0, planned = 0, missed = 0
+    const stockFreq = {}
+    const tagFreq = {}
+    reviews.forEach(r => {
+      r.formData.buyList.forEach(b => { if (b.stock) { totalBuys++; if (b.matchPlan) planned++; stockFreq[b.stock] = (stockFreq[b.stock] || 0) + 1 } })
+      r.formData.sellList.forEach(s => { if (s.stock) { totalSells++; if (s.matchPlan) planned++; stockFreq[s.stock] = (stockFreq[s.stock] || 0) + 1 } })
+      r.formData.missedList.forEach(m => { if (m.what) missed++ })
+      ;(r.tags || []).forEach(t => { tagFreq[t] = (tagFreq[t] || 0) + 1 })
+    })
+    const topStocks = Object.entries(stockFreq).sort((a, b) => b[1] - a[1]).slice(0, 5)
+    const topTags = Object.entries(tagFreq).sort((a, b) => b[1] - a[1]).slice(0, 5)
+    const adherenceRate = (totalBuys + totalSells) > 0 ? Math.round((planned / (totalBuys + totalSells)) * 100) : 0
+
+    const structuredData = '\n\n## 结构化数据\n' +
+      '- 交易天数：' + reviews.length + '\n' +
+      '- 买入 ' + totalBuys + ' 笔，卖出 ' + totalSells + ' 笔\n' +
+      '- 计划执行率：' + adherenceRate + '%\n' +
+      '- 未执行计划：' + missed + ' 条\n' +
+      '- 最常交易：' + topStocks.map(([s, c]) => s + '(' + c + '次)').join('、') + '\n' +
+      '- 行为标签：' + topTags.map(([t, c]) => t + '(' + c + '次)').join('、')
+
     const systemPrompt = `你是一个股票交易复盘分析师。请分析用户过去${typeLabel}的交易复盘记录，总结其交易模式、优缺点和改进建议。注意：
 1. 结合风险控制、趋势判断、节奏把握、心态管理等交易心法框架
 2. 重点关注用户的知行合一情况
 3. 发现可能存在的行为模式问题和改进方向
-4. 给出具体的建议，而非泛泛而谈`
+4. 给出具体的建议，而非泛泛而谈
+5. 引用具体数字和数据
+${structuredData}`
 
     try {
       const aiAnalysis = await callAI([

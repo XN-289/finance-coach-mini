@@ -89,6 +89,21 @@
       </view>
     </view>
 
+    <!-- 历史交易股票 -->
+    <view wx:if="{{tradedStocks.length > 0}}" class="traded-section">
+      <view class="section-label">📊 历史交易股票</view>
+      <view wx:for="{{tradedStocks}}" wx:key="name" class="traded-item">
+        <view class="traded-info">
+          <text class="traded-name">{{item.name}}</text>
+          <text wx:if="{{item.isFrequent}}" class="frequent-badge">高频</text>
+        </view>
+        <view class="traded-meta">
+          <text class="traded-count">{{item.count}}次</text>
+          <text class="traded-last">{{item.lastDirection}} {{item.lastDate}}</text>
+        </view>
+      </view>
+    </view>
+
     <!-- 空状态 -->
     <view wx:if="{{watchlist.length === 0 && !showSearch}}" class="empty-state">
       <text class="empty-icon">📋</text>

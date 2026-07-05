@@ -36,7 +36,8 @@ function computeAllStats(reviews) {
     recentScore: computeRecentScore(sorted),
     adherenceTrend: computeAdherenceTrend(sorted),
     mostCommonMissed: computeMostCommonMissed(sorted),
-    reviewTimeDistribution: computeReviewTimeDistribution(sorted)
+    reviewTimeDistribution: computeReviewTimeDistribution(sorted),
+    habitScores: computeHabitScores(sorted)
   }
 }
 
@@ -359,6 +360,42 @@ function computeReviewTimeDistribution(reviews) {
 }
 
 /**
+ * 计算交易习惯评分（0-100）
+ * 追踪关键习惯：计划习惯、复盘习惯、风控习惯、耐心习惯
+ */
+function computeHabitScores(reviews) {
+  if (reviews.length === 0) return { planning: 0, reviewing: 0, riskMgmt: 0, patience: 0, overall: 0 }
+
+  // 计划习惯：有 If-Then 计划的比例
+  const withPlan = reviews.filter(r => r.formData.tomorrow && r.formData.tomorrow.trim().length > 5).length
+  const planning = Math.round((withPlan / reviews.length) * 100)
+
+  // 复盘习惯：当天复盘的比例
+  const today = formatDate(Date.now())
+  const sameDay = reviews.filter(r => r.date === today || (Date.now() - r.timestamp) < 24 * 60 * 60 * 1000).length
+  const reviewing = Math.min(100, Math.round((reviews.length / Math.max(1, reviews.length)) * 100))
+
+  // 风控习惯：止损相关标签或计划的比例
+  let riskMentions = 0
+  reviews.forEach(r => {
+    if (/止损|止盈|风控|仓位/.test(r.formData.tomorrow || '')) riskMentions++
+    if ((r.tags || []).some(t => ['止损拖延', '仓位失控'].includes(t))) riskMentions--
+  })
+  const riskMgmt = Math.max(0, Math.min(100, 50 + riskMentions * 5))
+
+  // 耐心习惯：过度交易标签的比例
+  let impatientCount = 0
+  reviews.forEach(r => {
+    if ((r.tags || []).some(t => ['过度交易', '盘中冲动', '追涨'].includes(t))) impatientCount++
+  })
+  const patience = Math.max(0, Math.min(100, 100 - Math.round((impatientCount / reviews.length) * 100)))
+
+  const overall = Math.round((planning + reviewing + riskMgmt + patience) / 4)
+
+  return { planning, reviewing, riskMgmt, patience, overall }
+}
+
+/**
  * 获取最近 N 天的复盘数据
  */
 function getRecentReviews(days) {
@@ -377,5 +414,6 @@ module.exports = {
   countTotalTrades,
   countBuyTrades,
   countSellTrades,
-  countMissedPlans
+  countMissedPlans,
+  computeHabitScores
 }

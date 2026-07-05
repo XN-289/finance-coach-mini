@@ -28,6 +28,41 @@
 }
 
 /* ==============================
+   智能通知条
+   ============================== */
+.notification-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18rpx 28rpx;
+  font-size: 26rpx;
+  font-weight: 500;
+  border-bottom: 1rpx solid var(--border);
+  animation: fadeIn 0.3s ease;
+}
+
+.notification-high {
+  background: linear-gradient(135deg, var(--primary-light) 0%, #fff 100%);
+  color: var(--primary);
+}
+
+.notification-medium {
+  background: linear-gradient(135deg, var(--warning-light) 0%, #fff 100%);
+  color: var(--warning);
+}
+
+.notification-low {
+  background: linear-gradient(135deg, var(--info-light) 0%, #fff 100%);
+  color: var(--info);
+}
+
+.notification-close {
+  font-size: 36rpx;
+  padding: 4rpx 12rpx;
+  opacity: 0.6;
+}
+
+/* ==============================
    草稿提示条
    ============================== */
 .draft-bar {

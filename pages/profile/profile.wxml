@@ -27,6 +27,24 @@
       </view>
     </view>
 
+    <!-- 交易画像 -->
+    <view wx:if="{{tradingProfile}}" class="profile-card">
+      <view class="profile-title">🧠 交易画像</view>
+      <view class="profile-style">{{tradingProfile.style}}</view>
+      <view class="profile-tags">
+        <text class="profile-tag-label">高频标签：</text>
+        <text wx:for="{{tradingProfile.topTags}}" wx:key="*this" class="profile-tag">{{item}}</text>
+      </view>
+      <view class="profile-row">
+        <text class="profile-label">优势：</text>
+        <text class="profile-value">{{tradingProfile.strengths}}</text>
+      </view>
+      <view class="profile-row">
+        <text class="profile-label">待改善：</text>
+        <text class="profile-value">{{tradingProfile.weaknesses}}</text>
+      </view>
+    </view>
+
     <!-- 功能菜单 -->
     <view class="menu-section">
       <view class="menu-title">数据与分析</view>
